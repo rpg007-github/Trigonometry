@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trig Visual Lab – Interactive Trigonometry Study Guide</title>
+<meta name="description" content="An interactive trigonometry study guide with visual tools, worked examples, quizzes, and flashcards. Designed for all learners including those using screen readers.">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#C4880B;--accent-light:#F5E6C8;--accent-pale:#FDF6EC;--accent-dark:#8A5F08;
+  --bg:#FDFAF5;--card-bg:#FFFFFF;--text:#2C2416;--text2:#5C4D3C;--border:#E8DFD2;
+  --success:#1A6E36;--success-bg:#C8EDD5;--error:#9B2318;--error-bg:#F5CCC9;
+  --blue:#0D3D6B;--blue-bg:#E3F0FA;--blue-border:#2E7DB8;
+  --green-bg:#EBF6DF;--green-border:#4D9022;
+  --focus:#0066CC;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+
+/* Skip link */
+.skip-link{position:absolute;top:-100px;left:1rem;background:#0D3D6B;color:#fff;padding:0.75rem 1.5rem;border-radius:0 0 8px 8px;font-weight:700;font-size:1rem;z-index:9999;text-decoration:none;transition:top 0.2s;}
+.skip-link:focus{top:0;}
+
+/* Focus styles - visible for keyboard users */
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;}
+button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px;}
+
+body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:17px;}
+h1,h2,h3,h4{font-family:'Crimson Pro',serif;line-height:1.35;}
+code{font-family:'JetBrains Mono',monospace;background:var(--accent-pale);padding:2px 6px;border-radius:4px;font-size:0.9em;border:1px solid var(--accent-light);}
+
+/* Header */
+.site-header{background:linear-gradient(135deg,#3D2E1A,#5C4420,#3D2E1A);padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden;}
+.site-header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 30px,rgba(196,136,11,0.04) 30px,rgba(196,136,11,0.04) 60px);}
+.site-header h1{color:#F5E6C8;font-size:2.6rem;position:relative;z-index:1;}
+.site-header .sub{color:#C4A86B;font-family:'Source Sans 3',sans-serif;font-size:1.1rem;margin-top:0.4rem;position:relative;z-index:1;font-weight:300;}
+
+.container{max-width:960px;margin:0 auto;padding:2rem 1.5rem;}
+
+/* Tab navigation - full ARIA roles */
+.tab-nav{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.5rem;position:sticky;top:0;z-index:100;background:var(--bg);padding:0.8rem 0;border-bottom:2px solid var(--border);}
+.tab-btn{padding:0.5rem 1rem;border:2px solid var(--border);background:var(--card-bg);color:var(--text2);border-radius:8px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:0.88rem;transition:all 0.2s;position:relative;}
+.tab-btn:hover{border-color:var(--accent);color:var(--accent-dark);background:var(--accent-pale);}
+.tab-btn[aria-selected="true"]{background:var(--accent);color:#fff;border-color:var(--accent);}
+.tab-btn[aria-selected="true"]:focus-visible{outline-color:#fff;}
+.tab-content{display:none;}.tab-content.active{display:block;}
+
+/* Cards */
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:2rem;margin-bottom:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+.card h2{font-size:1.5rem;margin-bottom:0.3rem;color:var(--accent-dark);border-bottom:3px solid var(--accent-light);padding-bottom:0.4rem;}
+.card h3{font-size:1.15rem;margin:1.4rem 0 0.5rem;color:var(--text);}
+.card p{margin-bottom:0.8rem;}
+
+/* Definition, analogy, warning boxes */
+.define{background:#FFF9F0;border:2px solid var(--accent);border-radius:10px;padding:1.1rem 1.4rem;margin:1rem 0;}
+.define-label{display:block;font-weight:700;color:var(--accent-dark);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem;}
+.analogy{background:var(--green-bg);border-left:5px solid var(--green-border);border-radius:0 10px 10px 0;padding:1rem 1.3rem;margin:1rem 0;}
+.analogy-icon{display:block;font-weight:700;color:#2E6010;font-size:0.8rem;margin-bottom:0.2rem;}
+.mistake{background:var(--error-bg);border-left:5px solid var(--error);border-radius:0 10px 10px 0;padding:1rem 1.3rem;margin:1rem 0;}
+.mistake-icon{display:block;font-weight:700;color:var(--error);font-size:0.8rem;margin-bottom:0.2rem;}
+.try-it{background:var(--blue-bg);border:2px solid var(--blue-border);border-radius:10px;padding:1.1rem 1.4rem;margin:1rem 0;}
+.try-it-icon{display:block;font-weight:700;color:var(--blue);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem;}
+
+/* Vocab tooltips - accessible */
+.vocab{position:relative;font-weight:600;color:var(--accent-dark);border-bottom:2px dashed var(--accent);cursor:help;}
+.vocab .vtip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#3D2E1A;color:#F5E6C8;padding:0.7rem 1rem;border-radius:8px;font-size:0.85rem;font-weight:400;width:260px;z-index:200;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,0.2);pointer-events:none;}
+.vocab .vtip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#3D2E1A;}
+.vocab:hover .vtip,.vocab:focus .vtip{display:block;}
+.vocab[tabindex="0"]{outline-offset:2px;}
+
+/* Inline checks / quick checks */
+.inline-check{background:linear-gradient(135deg,#FDF6EC,#F5E6C8);border:2px solid var(--accent);border-radius:12px;padding:1.2rem 1.4rem;margin:1.3rem 0;}
+.inline-check .ic-label{font-weight:700;color:var(--accent-dark);font-size:0.85rem;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.5rem;}
+.ic-check-icon{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--accent);color:#fff;border-radius:50%;font-size:0.75rem;flex-shrink:0;aria-hidden:true;}
+.inline-check .ic-q{font-weight:600;margin-bottom:0.7rem;font-size:1rem;line-height:1.6;}
+.ic-btn{display:block;width:100%;text-align:left;padding:0.6rem 1rem;background:#fff;border:2px solid var(--border);border-radius:8px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:0.93rem;transition:all 0.2s;margin-bottom:0.35rem;line-height:1.5;}
+.ic-btn:hover{border-color:var(--accent);background:var(--accent-pale);}
+.ic-btn.ic-correct{background:var(--success-bg);border-color:var(--success);color:var(--success);font-weight:600;}
+.ic-btn.ic-correct::after{content:' ✓';font-weight:700;}
+.ic-btn.ic-wrong{background:var(--error-bg);border-color:var(--error);color:var(--error);opacity:0.85;}
+.ic-btn.ic-wrong::after{content:' ✗';}
+.ic-btn:disabled{cursor:not-allowed;}
+.ic-explain{margin-top:0.6rem;padding:0.8rem;background:rgba(255,255,255,0.85);border-radius:8px;font-size:0.92rem;color:var(--text2);line-height:1.7;border-left:3px solid var(--accent);}
+.ic-explain[hidden]{display:none;}
+
+/* Canvas */
+.canvas-wrap{background:#FAF7F2;border:2px solid var(--border);border-radius:12px;padding:1rem;margin:1rem 0;text-align:center;overflow:hidden;position:relative;}
+.canvas-desc{font-size:0.85rem;color:var(--text2);text-align:center;margin-top:0.4rem;font-style:italic;}
+canvas{display:block;margin:0 auto;cursor:crosshair;max-width:100%;touch-action:none;}
+/* Live text alternative for canvas (screen reader) */
+.canvas-live{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+
+/* Controls */
+.controls{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-start;margin:1rem 0;padding:1rem;background:var(--accent-pale);border-radius:10px;border:1px solid var(--accent-light);}
+.control-group{flex:1;min-width:180px;}
+.control-group label{display:block;font-weight:600;font-size:0.9rem;color:var(--accent-dark);margin-bottom:0.4rem;}
+.control-group input[type=range]{width:100%;accent-color:var(--accent);height:6px;cursor:pointer;}
+.control-group input[type=range]:focus-visible{outline:3px solid var(--focus);outline-offset:4px;border-radius:4px;}
+.control-value{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--accent-dark);font-size:1.05rem;}
+
+/* Readout panels */
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.8rem;margin:1rem 0;}
+.readout-item{background:var(--accent-pale);border:1px solid var(--accent-light);border-radius:8px;padding:0.8rem;text-align:center;}
+.readout-item .label{font-size:0.8rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.04em;}
+.readout-item .value{font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--accent-dark);margin-top:0.2rem;}
+
+/* Formula box */
+.formula-box{background:var(--accent-pale);border-left:4px solid var(--accent);padding:1rem 1.2rem;margin:1rem 0;border-radius:0 8px 8px 0;font-family:'JetBrains Mono',monospace;font-size:0.92rem;line-height:2;}
+
+/* Tables */
+.fact-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.93rem;}
+.fact-table caption{font-weight:700;font-size:0.9rem;color:var(--accent-dark);text-align:left;padding:0.4rem 0;margin-bottom:0.3rem;}
+.fact-table th{background:var(--accent);color:#fff;padding:0.6rem 0.8rem;text-align:left;font-weight:600;border:1px solid var(--accent-dark);}
+.fact-table td{padding:0.6rem 0.8rem;border-bottom:1px solid var(--border);border:1px solid var(--border);}
+.fact-table tr:nth-child(even) td{background:#FDFAF5;}
+.fact-table tr.highlight td{background:var(--accent-light);font-weight:600;}
+.fact-table tr:hover td{background:var(--accent-pale);}
+
+/* Mnemonic */
+.mnemonic{background:linear-gradient(135deg,#FDF6EC,#F5E6C8);border:2px solid var(--accent);border-radius:10px;padding:1rem 1.2rem;margin:1rem 0;font-weight:600;color:var(--accent-dark);}
+
+/* Worked examples */
+.worked{background:#F8F4ED;border:2px solid var(--border);border-radius:10px;padding:1.4rem;margin:1.2rem 0;}
+.worked .ex-title{font-weight:700;color:var(--accent-dark);margin-bottom:0.7rem;font-size:1.1rem;font-family:'Crimson Pro',serif;border-bottom:2px solid var(--accent-light);padding-bottom:0.4rem;}
+.worked .step{margin:0.5rem 0;padding:0.6rem 0.8rem;background:rgba(255,255,255,0.8);border-radius:6px;border-left:3px solid var(--accent-light);}
+.worked .step-label{font-weight:700;color:var(--accent-dark);font-size:0.85rem;display:block;margin-bottom:0.2rem;}
+.worked .step-note{color:var(--text2);font-size:0.88rem;font-style:italic;margin-top:0.2rem;display:block;}
+.worked .final{background:var(--accent-light);border-left:3px solid var(--accent);}
+.worked .step-math{font-family:'JetBrains Mono',monospace;font-size:0.95rem;background:#fff;padding:0.2rem 0.5rem;border-radius:4px;display:inline-block;margin-top:0.2rem;}
+
+/* Worked example "show more" pattern */
+.worked-series{counter-reset:example-counter;}
+.worked-series .worked{counter-increment:example-counter;}
+.worked-series .worked .ex-title::before{content:'Example ' counter(example-counter) ': ';color:var(--text2);font-size:0.9rem;}
+
+/* Quiz */
+.quiz-controls{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:1rem;}
+.quiz-btn{padding:0.45rem 1rem;border:2px solid var(--accent);background:transparent;color:var(--accent-dark);border-radius:6px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:0.88rem;transition:all 0.2s;}
+.quiz-btn:hover,.quiz-btn[aria-pressed="true"]{background:var(--accent);color:#fff;}
+.quiz-question{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.3rem;margin-bottom:0.8rem;}
+.quiz-question .q-text{font-weight:600;margin-bottom:0.8rem;font-size:1rem;line-height:1.6;}
+.quiz-question .q-diff{font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;color:var(--text2);}
+.choice-btn{display:block;width:100%;text-align:left;padding:0.65rem 1rem;background:#FDFAF5;border:2px solid var(--border);border-radius:6px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:0.93rem;transition:all 0.2s;margin-bottom:0.4rem;line-height:1.5;}
+.choice-btn:hover:not(:disabled){border-color:var(--accent);background:var(--accent-light);}
+.choice-btn.correct{background:var(--success-bg);border-color:var(--success);color:var(--success);font-weight:600;}
+.choice-btn.correct::after{content:' ✓';}
+.choice-btn.wrong{background:var(--error-bg);border-color:var(--error);color:var(--error);}
+.choice-btn.wrong::after{content:' ✗';}
+.choice-btn:disabled{cursor:not-allowed;}
+.explanation{margin-top:0.7rem;padding:0.9rem;background:var(--accent-pale);border-radius:8px;font-size:0.93rem;color:var(--text2);line-height:1.7;border-left:3px solid var(--accent);}
+.explanation[hidden]{display:none;}
+.score-bar{text-align:center;padding:0.6rem;font-weight:600;color:var(--accent-dark);font-size:1rem;border:2px solid var(--accent-light);border-radius:8px;background:var(--accent-pale);margin-bottom:1rem;}
+
+/* Flashcards */
+.flashcard-container{perspective:1000px;margin:1rem 0;}
+.flashcard{width:100%;min-height:220px;cursor:pointer;position:relative;transform-style:preserve-3d;transition:transform 0.5s;}
+.flashcard.flipped{transform:rotateY(180deg);}
+.flashcard .fc-front,.flashcard .fc-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:2rem;text-align:center;font-size:1.05rem;line-height:1.7;}
+.flashcard .fc-front{background:linear-gradient(135deg,#FDF6EC,#F5E6C8);border:2px solid var(--accent);font-weight:600;color:var(--accent-dark);}
+.flashcard .fc-back{background:var(--accent);color:#fff;transform:rotateY(180deg);font-weight:600;}
+.fc-nav{display:flex;justify-content:center;gap:0.8rem;margin-top:1rem;align-items:center;flex-wrap:wrap;}
+.fc-nav button{padding:0.45rem 1.2rem;border:2px solid var(--accent);background:transparent;color:var(--accent-dark);border-radius:6px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-weight:600;transition:all 0.2s;font-size:0.9rem;}
+.fc-nav button:hover{background:var(--accent);color:#fff;}
+.fc-status{font-weight:600;color:var(--accent-dark);font-family:'JetBrains Mono',monospace;}
+
+/* Short answer */
+.sa-question{margin-bottom:1.5rem;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.3rem;}
+.sa-question .q-text{font-weight:600;margin-bottom:0.6rem;line-height:1.6;}
+.sa-input{width:100%;padding:0.7rem 1rem;border:2px solid var(--border);border-radius:8px;font-family:'Source Sans 3',sans-serif;font-size:1rem;resize:vertical;min-height:90px;line-height:1.6;color:var(--text);}
+.sa-input:focus{outline:3px solid var(--focus);outline-offset:2px;border-color:var(--accent);}
+.sa-check-btn{margin-top:0.5rem;padding:0.55rem 1.4rem;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:1rem;transition:background 0.2s;}
+.sa-check-btn:hover{background:var(--accent-dark);}
+.sa-feedback{margin-top:0.6rem;padding:0.9rem;border-radius:8px;font-size:0.93rem;line-height:1.7;border-left:4px solid transparent;}
+.sa-feedback[hidden]{display:none;}
+.sa-feedback.good{background:var(--success-bg);color:var(--success);border-color:var(--success);}
+.sa-feedback.partial{background:#FFF3CD;color:#7A5800;border-color:#D4A017;}
+.sa-feedback.needs-work{background:var(--error-bg);color:var(--error);border-color:var(--error);}
+
+/* Special callout boxes */
+.gentle{background:#F8F9FA;border:1px solid var(--border);border-radius:10px;padding:1.3rem 1.5rem;margin:1rem 0;font-size:1rem;line-height:1.9;}
+.gentle strong{color:var(--accent-dark);}
+.big-reveal{background:linear-gradient(135deg,#3D2E1A,#5C4420);color:#F5E6C8;border-radius:12px;padding:1.5rem 1.8rem;margin:1.2rem 0;text-align:center;font-size:1.15rem;line-height:1.8;}
+.big-reveal strong{color:#F0C75E;}
+.pro-tip{background:#EFF8FF;border:2px solid #3B82C4;border-radius:10px;padding:1rem 1.3rem;margin:1rem 0;}
+.pro-tip-label{display:block;font-weight:700;color:#1A5D9A;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.3rem;}
+
+/* Footer */
+.site-footer{text-align:center;padding:2rem;color:var(--text2);font-size:0.85rem;border-top:1px solid var(--border);margin-top:2rem;}
+
+/* High contrast mode support */
+@media (forced-colors: active){
+  .tab-btn[aria-selected="true"]{border:3px solid ButtonText;}
+  .ic-btn.ic-correct{border:3px solid ButtonText;}
+  .ic-btn.ic-wrong{border:3px solid ButtonText;}
+  canvas{border:2px solid ButtonText;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .flashcard,.tab-btn,.ic-btn,.choice-btn,.quiz-btn{transition:none;}
+  .flashcard{transform:none!important;}
+  .flashcard.flipped .fc-front{display:none;}
+  .flashcard.flipped .fc-back{transform:none;position:relative;}
+}
+
+@media(max-width:640px){
+  .site-header h1{font-size:2rem;}.container{padding:1rem;}.card{padding:1.3rem;}
+  .tab-nav{gap:0.3rem;}.tab-btn{font-size:0.78rem;padding:0.4rem 0.6rem;}
+  .controls{flex-direction:column;}.readout{grid-template-columns:repeat(2,1fr);}
+  .vocab .vtip{left:0;transform:none;width:220px;}
+  .quiz-controls{gap:0.4rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- Skip navigation link for keyboard/screen reader users -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="site-header" role="banner">
+  <h1>Trig Visual Lab</h1>
+  <p class="sub">See it. Move it. Understand it.</p>
+</header>
+
+<div class="container" id="main-content">
+
+<!-- Tab navigation with full ARIA -->
+<nav aria-label="Course sections" id="tab-nav-region">
+  <div class="tab-nav" role="tablist" aria-label="Trigonometry topics" id="tab-nav">
+    <button class="tab-btn" role="tab" aria-selected="true" aria-controls="tab-welcome" id="btn-welcome" onclick="switchTab('welcome',this)">Start Here</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-triangle" id="btn-triangle" onclick="switchTab('triangle',this)">Right Triangle</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-unit-circle" id="btn-unit-circle" onclick="switchTab('unit-circle',this)">Unit Circle</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-graphs" id="btn-graphs" onclick="switchTab('graphs',this)">Wave Graphs</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-identities" id="btn-identities" onclick="switchTab('identities',this)">Identities</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-equations" id="btn-equations" onclick="switchTab('equations',this)">Equations</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-law" id="btn-law" onclick="switchTab('law',this)">Laws of Tri.</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-vectors" id="btn-vectors" onclick="switchTab('vectors',this)">Vectors</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-quiz" id="btn-quiz" onclick="switchTab('quiz',this)">Quiz</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-flashcards" id="btn-flashcards" onclick="switchTab('flashcards',this)">Flashcards</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-short-answer" id="btn-short-answer" onclick="switchTab('short-answer',this)">Short Answer</button>
+  </div>
+</nav>
+
+<!-- ===== WELCOME ===== -->
+<div class="tab-content active" id="tab-welcome" role="tabpanel" aria-labelledby="btn-welcome" tabindex="0">
+<div class="card">
+  <h2>Welcome! Start Here.</h2>
+  <div class="gentle">
+    <p>If you are here, it is probably because trigonometry feels confusing, or maybe a little scary. <strong>That is completely normal.</strong> Trig is one of those subjects that is genuinely hard to learn from a textbook because it is about shapes, angles, and motion: things you need to <em>see moving in front of you</em>, not just read about on a flat page.</p>
+    <p>This guide is different. Every single idea comes with an interactive tool you can touch and play with. You will drag angles, watch triangles change shape in real time, spin a point around a circle, and build wave graphs with sliders. Nothing is hidden behind formulas you are supposed to "just memorize." You will see <em>why</em> every formula works.</p>
+    <p><strong>If you went through COVID, had gaps in school, or feel like you never really learned this — this guide is built for you specifically.</strong> Every concept starts from absolute zero. No background assumed.</p>
+  </div>
+
+  <h3>Before We Start: What Even IS Trigonometry?</h3>
+  <div class="define" role="note" aria-label="Definition: Trigonometry">
+    <span class="define-label">New Word</span>
+    <p><strong>Trigonometry</strong> literally means "triangle measurement." It is the study of how the <strong>angles</strong> (the "corners") and the <strong>sides</strong> (the straight edges) of triangles are connected to each other.</p>
+    <p>Here is the big idea in one sentence: <strong>If you know one angle and one side of a certain type of triangle, you can figure out every other side.</strong> That is the entire subject.</p>
+  </div>
+
+  <div class="analogy" role="note" aria-label="Real-world analogy">
+    <span class="analogy-icon" aria-hidden="true">💡 Think of it this way:</span>
+    Imagine you are standing 20 feet from a tall tree. You tilt your head up at a 60-degree angle to see the top. You have never climbed that tree. You have no tape measure long enough to reach the top. But with trig, you can calculate that the tree is about 34.6 feet tall, just from the angle and the distance you paced off. <strong>Angles let you find distances you cannot measure directly.</strong> That is the superpower trig gives you.
+  </div>
+
+  <h3>Two Words You Need Right Now</h3>
+  <div class="define" role="note" aria-label="Definition: Angle">
+    <span class="define-label">New Word</span>
+    <p><strong>Angle</strong> = the amount of rotation between two lines that share the same starting point. Think of opening a door: the wider you push it, the bigger the angle. We measure angles in <strong>degrees</strong> (a full circle = 360&deg;) or <strong>radians</strong> (a full circle = about 6.28, which is exactly 2&pi;). Do not worry about radians yet. For now, just think in degrees.</p>
+  </div>
+  <div class="define" role="note" aria-label="Definition: Right triangle">
+    <span class="define-label">New Word</span>
+    <p><strong>Right triangle</strong> = a triangle where one of the three corners is exactly 90&deg; (a perfect square corner, like the corner of a piece of paper or a book). All of trig starts here because right triangles have a special property: the ratios of their sides are always the same for a given angle, no matter how big or small the triangle is.</p>
+  </div>
+
+  <div class="inline-check" id="ic-w1" role="group" aria-labelledby="ic-w1-label">
+    <div class="ic-label" id="ic-w1-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-w1-q">A right triangle always has one angle that equals:</p>
+    <button class="ic-btn" onclick="checkIC('ic-w1',this,false)" aria-describedby="ic-w1-q">45&deg;</button>
+    <button class="ic-btn" onclick="checkIC('ic-w1',this,true)" aria-describedby="ic-w1-q">90&deg;</button>
+    <button class="ic-btn" onclick="checkIC('ic-w1',this,false)" aria-describedby="ic-w1-q">180&deg;</button>
+    <div class="ic-explain" id="ic-w1-exp" hidden role="status">Correct! A right triangle always has one 90&deg; angle. That is the "right" in "right triangle." It looks like a perfect square corner, like the corner of a book.</div>
+  </div>
+
+  <h3>The One Thing You MUST Memorize</h3>
+  <div class="big-reveal" aria-label="SOH CAH TOA mnemonic">
+    <strong>SOH - CAH - TOA</strong><br>
+    Say it out loud: "so - kah - toe - ah"<br><br>
+    <strong>S</strong>ine = <strong>O</strong>pposite / <strong>H</strong>ypotenuse<br>
+    <strong>C</strong>osine = <strong>A</strong>djacent / <strong>H</strong>ypotenuse<br>
+    <strong>T</strong>angent = <strong>O</strong>pposite / <strong>A</strong>djacent
+  </div>
+  <p>You do not know what "opposite," "adjacent," or "hypotenuse" mean yet. That is totally fine! You will learn them on the very next tab. The point is: <strong>this one phrase unlocks almost everything in the first half of trig.</strong> Say it five times right now. Seriously. Out loud.</p>
+
+  <!-- NEW WORKED EXAMPLE: SOH-CAH-TOA preview -->
+  <div class="worked" aria-label="Worked example: SOH-CAH-TOA preview">
+    <div class="ex-title">Preview Worked Example: What SOH-CAH-TOA Looks Like in Action</div>
+    <div class="step">
+      <span class="step-label">The Setup</span>
+      You have a right triangle. The angle at the bottom-left corner is 30&deg;. The longest side (hypotenuse) is 10 units long. How long is the side directly across from the 30&deg; angle?
+    </div>
+    <div class="step">
+      <span class="step-label">Translate to SOH-CAH-TOA</span>
+      We want "Opposite" (the side across from our angle). We know "Hypotenuse" (10). That is SOH: <span class="step-math">sin(angle) = Opposite / Hypotenuse</span>
+    </div>
+    <div class="step">
+      <span class="step-label">Plug in numbers</span>
+      <span class="step-math">sin(30&deg;) = Opposite / 10</span><br>
+      A calculator (or memory) tells us sin(30&deg;) = 0.5.
+    </div>
+    <div class="step final">
+      <span class="step-label">Solve</span>
+      <span class="step-math">0.5 = Opposite / 10 &rarr; Opposite = 0.5 &times; 10 = 5</span><br>
+      The opposite side is <strong>5 units</strong>. Do not worry if this feels fast right now. The next two tabs will walk you through every piece of this step by step.
+    </div>
+  </div>
+
+  <div class="inline-check" id="ic-w2" role="group" aria-labelledby="ic-w2-label">
+    <div class="ic-label" id="ic-w2-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-w2-q">In SOH-CAH-TOA, the "CAH" tells you that Cosine equals:</p>
+    <button class="ic-btn" onclick="checkIC('ic-w2',this,false)" aria-describedby="ic-w2-q">Opposite / Hypotenuse</button>
+    <button class="ic-btn" onclick="checkIC('ic-w2',this,true)" aria-describedby="ic-w2-q">Adjacent / Hypotenuse</button>
+    <button class="ic-btn" onclick="checkIC('ic-w2',this,false)" aria-describedby="ic-w2-q">Opposite / Adjacent</button>
+    <div class="ic-explain" hidden role="status">Yes! <strong>C</strong>osine = <strong>A</strong>djacent / <strong>H</strong>ypotenuse. The next tab will show you exactly what "adjacent" and "hypotenuse" mean on a real triangle you can play with.</div>
+  </div>
+
+  <h3>How to Use This Guide</h3>
+  <div class="gentle">
+    <p><strong>Go through the tabs from left to right.</strong> Each one builds on the previous one. Do not skip ahead. Inside each tab, the interactive tool is at the top. Play with it first, then read the explanations below it. Every few paragraphs there is a "Quick Check" question. These are not graded. They just make sure you understood what you just read before you move on. If you get one wrong, re-read the section above it. Take your time. There is no rush.</p>
+  </div>
+  <div class="pro-tip" role="note">
+    <span class="pro-tip-label" aria-hidden="true">&#127775; Screen Reader Note</span>
+    <p>All interactive sliders announce their current values. Canvas diagrams have text descriptions below them. Quiz answers announce whether they are correct or incorrect. All features are fully keyboard-navigable using Tab, Enter, and Space.</p>
+  </div>
+</div>
+</div>
+
+<!-- ===== RIGHT TRIANGLE ===== -->
+<div class="tab-content" id="tab-triangle" role="tabpanel" aria-labelledby="btn-triangle" tabindex="0">
+<div class="card">
+  <h2>The Right Triangle</h2>
+  <div class="gentle">
+    <p>Everything in trig starts with one shape: the <strong>right triangle</strong>. Before we touch any formulas, you need to be able to look at a right triangle and name its three sides. There are only three names to learn, and they are always the same.</p>
+  </div>
+
+  <h3>Step 1: Learn the Three Side Names</h3>
+  <div class="define" role="note" aria-label="Definition: Hypotenuse">
+    <span class="define-label">New Word: Hypotenuse</span>
+    <p>The <strong>hypotenuse</strong> (say "hi-POT-en-oose") is the <strong>longest side</strong> of a right triangle. It is always the side that sits across from the 90&deg; angle. It never touches the 90&deg; corner. In the triangle below, it is the <strong>dark/black line</strong>.</p>
+    <p><em>Memory trick: "Hypotenuse" is the longest word, and it is the longest side.</em></p>
+  </div>
+  <div class="define" role="note" aria-label="Definition: Opposite side">
+    <span class="define-label">New Word: Opposite Side</span>
+    <p>The <strong>opposite side</strong> is the side that is <strong>directly across from the angle you are looking at</strong>. We call that angle &theta; (the Greek letter "theta," pronounced "THAY-tuh"). The opposite side does NOT touch the angle &theta; at all. In the triangle below, it is the <strong>red line</strong>.</p>
+    <p><em>Think: if you are standing at the angle &theta; and looking straight ahead, the opposite side is the wall you are staring at.</em></p>
+  </div>
+  <div class="define" role="note" aria-label="Definition: Adjacent side">
+    <span class="define-label">New Word: Adjacent Side</span>
+    <p>The <strong>adjacent side</strong> is the side that is <strong>right next to the angle &theta;</strong>. It touches the angle, but it is NOT the hypotenuse. In the triangle below, it is the <strong>blue line</strong>.</p>
+    <p><em>"Adjacent" just means "next to." It is the floor you are standing on if you are standing at angle &theta;.</em></p>
+  </div>
+
+  <div class="inline-check" id="ic-t0" role="group" aria-labelledby="ic-t0-label">
+    <div class="ic-label" id="ic-t0-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-t0-q">Which side of a right triangle is always the longest?</p>
+    <button class="ic-btn" onclick="checkIC('ic-t0',this,false)" aria-describedby="ic-t0-q">The opposite side</button>
+    <button class="ic-btn" onclick="checkIC('ic-t0',this,false)" aria-describedby="ic-t0-q">The adjacent side</button>
+    <button class="ic-btn" onclick="checkIC('ic-t0',this,true)" aria-describedby="ic-t0-q">The hypotenuse</button>
+    <div class="ic-explain" hidden role="status">Yes! The hypotenuse is always the longest side. It is always across from the 90&deg; angle. The other two sides ("legs") can change depending on which angle you are looking at.</div>
+  </div>
+
+  <h3>Step 2: Play With the Triangle</h3>
+  <p>Use the sliders below to change the triangle. Watch how the three sides change size. <strong>Red = opposite side. Blue = adjacent side. Dark/black = hypotenuse.</strong> The readout panel shows you the trig values in real time.</p>
+
+  <div class="controls" role="group" aria-label="Triangle controls">
+    <div class="control-group">
+      <label for="tri-angle">Angle &theta;: <span class="control-value" id="tri-angle-val" aria-live="polite">45&deg;</span></label>
+      <input type="range" id="tri-angle" min="5" max="85" value="45" step="1" oninput="updateTriangle()" aria-valuemin="5" aria-valuemax="85" aria-valuenow="45" aria-label="Angle theta in degrees">
+    </div>
+    <div class="control-group">
+      <label for="tri-hyp">Hypotenuse length: <span class="control-value" id="tri-hyp-val" aria-live="polite">10</span></label>
+      <input type="range" id="tri-hyp" min="5" max="20" value="10" step="1" oninput="updateTriangle()" aria-valuemin="5" aria-valuemax="20" aria-valuenow="10" aria-label="Hypotenuse length">
+    </div>
+  </div>
+  <div class="canvas-wrap">
+    <canvas id="tri-canvas" width="500" height="350" role="img" aria-label="Interactive right triangle diagram" aria-describedby="tri-canvas-desc"></canvas>
+    <div class="canvas-live" aria-live="polite" aria-atomic="true" id="tri-canvas-live"></div>
+    <p class="canvas-desc" id="tri-canvas-desc">Interactive right triangle. Drag the sliders above to change the angle and size. Values update in the readout panel below.</p>
+  </div>
+  <div class="readout" id="tri-readout" aria-label="Triangle measurements">
+    <div class="readout-item"><div class="label">sin(&theta;)</div><div class="value" id="r-sin" aria-live="polite">0.707</div></div>
+    <div class="readout-item"><div class="label">cos(&theta;)</div><div class="value" id="r-cos" aria-live="polite">0.707</div></div>
+    <div class="readout-item"><div class="label">tan(&theta;)</div><div class="value" id="r-tan" aria-live="polite">1.000</div></div>
+    <div class="readout-item"><div class="label">Opposite</div><div class="value" id="r-opp" aria-live="polite">7.07</div></div>
+    <div class="readout-item"><div class="label">Adjacent</div><div class="value" id="r-adj" aria-live="polite">7.07</div></div>
+    <div class="readout-item"><div class="label">Hypotenuse</div><div class="value" id="r-hyp2" aria-live="polite">10</div></div>
+  </div>
+
+  <h3>Step 3: Connect the Sides to the Formulas</h3>
+  <div class="gentle">
+    <p>Remember SOH-CAH-TOA? Now you know what all the words in it mean! Sine, cosine, and tangent are just <strong>ratios</strong> (fractions) of two sides of the triangle:</p>
+  </div>
+  <div class="formula-box" role="note" aria-label="SOH-CAH-TOA formulas">
+    <strong>sin(&theta;)</strong> = Opposite / Hypotenuse &nbsp; &larr; <strong>SOH</strong><br>
+    <strong>cos(&theta;)</strong> = Adjacent / Hypotenuse &nbsp; &larr; <strong>CAH</strong><br>
+    <strong>tan(&theta;)</strong> = Opposite / Adjacent &nbsp;&nbsp;&nbsp; &larr; <strong>TOA</strong>
+  </div>
+  <div class="analogy" role="note">
+    <span class="analogy-icon" aria-hidden="true">💡 Think of it this way:</span>
+    These are just fractions. Nothing fancy. sin(&theta;) answers the question: "What fraction of the hypotenuse is the opposite side?" If sin(30&deg;) = 0.5, that means the opposite side is exactly half as long as the hypotenuse. That is it. No magic.
+  </div>
+
+  <div class="try-it" role="note">
+    <span class="try-it-icon" aria-hidden="true">&#128075; Try It Yourself</span>
+    <p><strong>Do this right now:</strong> Set the angle slider to <strong>30&deg;</strong> and the hypotenuse to <strong>10</strong>. Look at the readout: sin(30&deg;) = <strong>0.500</strong>. Now look at "Opposite" (should be <strong>5.00</strong>) and "Hypotenuse" (should be <strong>10</strong>). Check: 5 &divide; 10 = 0.5. That IS sin(30&deg;). You just verified the formula with your own eyes!</p>
+    <p><strong>Now try 60&deg;:</strong> Notice sin(60&deg;) = 0.866, which was the value of cos(30&deg;)! Sine and cosine "swap" when the angles add to 90&deg;.</p>
+  </div>
+
+  <div class="inline-check" id="ic-t1" role="group" aria-labelledby="ic-t1-label">
+    <div class="ic-label" id="ic-t1-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-t1-q">Set the slider to 45&deg;. What is tan(45&deg;)?</p>
+    <button class="ic-btn" onclick="checkIC('ic-t1',this,false)" aria-describedby="ic-t1-q">0</button>
+    <button class="ic-btn" onclick="checkIC('ic-t1',this,false)" aria-describedby="ic-t1-q">0.707</button>
+    <button class="ic-btn" onclick="checkIC('ic-t1',this,true)" aria-describedby="ic-t1-q">1</button>
+    <button class="ic-btn" onclick="checkIC('ic-t1',this,false)" aria-describedby="ic-t1-q">Undefined</button>
+    <div class="ic-explain" hidden role="status">Correct! At 45&deg;, the opposite and adjacent sides are the same length (both 7.07). Tangent = opposite / adjacent = 7.07 / 7.07 = 1. Any number divided by itself equals 1.</div>
+  </div>
+
+  <!-- WORKED EXAMPLES SERIES: Finding missing sides -->
+  <h3>Worked Examples: Finding Missing Sides</h3>
+  <p>These are the most common type of problem you will see. There are only three things you can be given, and only three things you can be asked to find. Here are all the key patterns:</p>
+
+  <div class="worked-series">
+    <div class="worked" aria-label="Worked example 1">
+      <div class="ex-title">Finding a Missing Side Using SOH (Given: angle = 30&deg;, hypotenuse = 10, find the opposite side)</div>
+      <div class="step">
+        <span class="step-label">Step 1: Label what you know and want</span>
+        Known: angle &theta; = 30&deg;, hypotenuse = 10. Want: opposite side. <span class="step-note">Underline or circle these in a real problem.</span>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 2: Which SOH-CAH-TOA formula has both things you know?</span>
+        I know the hypotenuse and want the opposite. SOH uses opposite AND hypotenuse. <strong>Use SOH.</strong>
+        <div class="step-math">sin(&theta;) = Opposite / Hypotenuse</div>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 3: Plug in what you know</span>
+        <div class="step-math">sin(30&deg;) = Opposite / 10</div>
+        Look up or recall: sin(30&deg;) = 0.5
+        <div class="step-math">0.5 = Opposite / 10</div>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 4: Solve for the unknown (multiply both sides by 10)</span>
+        <div class="step-math">Opposite = 0.5 &times; 10 = 5</div>
+      </div>
+      <div class="step final">
+        <span class="step-label">Answer</span>
+        The opposite side is <strong>5 units</strong>. Set the slider to 30&deg; and verify: Opposite = 5.00 &#10003;
+      </div>
+    </div>
+
+    <div class="worked" aria-label="Worked example 2">
+      <div class="ex-title">Finding the Hypotenuse Using CAH (Given: angle = 40&deg;, adjacent = 8, find the hypotenuse)</div>
+      <div class="step">
+        <span class="step-label">Step 1: Label what you know and want</span>
+        Known: angle &theta; = 40&deg;, adjacent = 8. Want: hypotenuse. <span class="step-note">CAH uses adjacent AND hypotenuse. Use CAH.</span>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 2: Write the formula</span>
+        <div class="step-math">cos(&theta;) = Adjacent / Hypotenuse</div>
+        <div class="step-math">cos(40&deg;) = 8 / Hypotenuse</div>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 3: The unknown is in the denominator. Cross-multiply.</span>
+        <div class="step-math">Hypotenuse &times; cos(40&deg;) = 8</div>
+        <div class="step-math">Hypotenuse = 8 / cos(40&deg;)</div>
+        cos(40&deg;) &asymp; 0.766
+        <div class="step-math">Hypotenuse = 8 / 0.766 &asymp; 10.44</div>
+      </div>
+      <div class="step final">
+        <span class="step-label">Answer</span>
+        The hypotenuse is approximately <strong>10.44 units</strong>.
+        <span class="step-note">Rule: if the unknown is on the bottom of a fraction, divide both sides by the trig value.</span>
+      </div>
+    </div>
+
+    <div class="worked" aria-label="Worked example 3">
+      <div class="ex-title">Finding an Angle Using Inverse Trig (Given: opposite = 6, hypotenuse = 10, find the angle)</div>
+      <div class="step">
+        <span class="step-label">Step 1: Identify what you know</span>
+        We have opposite and hypotenuse. That is SOH. But we want the <em>angle</em>, not a side.
+        <div class="step-math">sin(&theta;) = 6 / 10 = 0.6</div>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 2: Reverse it using "inverse sine"</span>
+        To find the angle when you know the sine value, use the inverse function. On a calculator: <strong>sin&sup1; button (often labeled sin&#x207B;&#x00B9; or arcsin)</strong>.
+        <div class="step-math">&theta; = sin&sup1;(0.6)</div>
+      </div>
+      <div class="step final">
+        <span class="step-label">Answer</span>
+        <div class="step-math">&theta; = sin&sup1;(0.6) &asymp; 36.87&deg;</div>
+        The angle is about <strong>36.9&deg;</strong>. <span class="step-note">sin&sup1; does NOT mean 1/sin. It means "what angle has this sine value?" See the Identities tab for more on this.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="inline-check" id="ic-t2" role="group" aria-labelledby="ic-t2-label">
+    <div class="ic-label" id="ic-t2-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-t2-q">You know the angle and the adjacent side, and want the hypotenuse. Which formula?</p>
+    <button class="ic-btn" onclick="checkIC('ic-t2',this,false)" aria-describedby="ic-t2-q">SOH (sin = opp/hyp)</button>
+    <button class="ic-btn" onclick="checkIC('ic-t2',this,true)" aria-describedby="ic-t2-q">CAH (cos = adj/hyp)</button>
+    <button class="ic-btn" onclick="checkIC('ic-t2',this,false)" aria-describedby="ic-t2-q">TOA (tan = opp/adj)</button>
+    <div class="ic-explain" hidden role="status">Right! CAH uses adjacent and hypotenuse. Rearrange: Hypotenuse = Adjacent / cos(&theta;).</div>
+  </div>
+
+  <h3>The "Flip" Functions (Reciprocals)</h3>
+  <div class="gentle"><p>Sometimes you need to flip a fraction upside down. Instead of opposite/hypotenuse, you need hypotenuse/opposite. These flipped versions have their own names:</p></div>
+  <div class="define" role="note" aria-label="Reciprocal trig functions">
+    <span class="define-label">New Words</span>
+    <p>"Reciprocal" means flip the fraction:</p>
+    <p><strong>Cosecant</strong> (csc) = 1/sin = Hypotenuse / Opposite</p>
+    <p><strong>Secant</strong> (sec) = 1/cos = Hypotenuse / Adjacent</p>
+    <p><strong>Cotangent</strong> (cot) = 1/tan = Adjacent / Opposite</p>
+  </div>
+  <div class="mistake" role="alert">
+    <span class="mistake-icon" aria-hidden="true">&#9888;&#65039; Watch Out!</span>
+    <strong>Everyone gets this wrong at first:</strong> Cosecant goes with sine (not cosine!). Secant goes with cosine (not sine!). The names deliberately cross. csc pairs with sin. sec pairs with cos.
+  </div>
+
+  <div class="inline-check" id="ic-t3" role="group" aria-labelledby="ic-t3-label">
+    <div class="ic-label" id="ic-t3-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-t3-q">The reciprocal of cosine is:</p>
+    <button class="ic-btn" onclick="checkIC('ic-t3',this,false)" aria-describedby="ic-t3-q">Cosecant (csc)</button>
+    <button class="ic-btn" onclick="checkIC('ic-t3',this,true)" aria-describedby="ic-t3-q">Secant (sec)</button>
+    <button class="ic-btn" onclick="checkIC('ic-t3',this,false)" aria-describedby="ic-t3-q">Cotangent (cot)</button>
+    <div class="ic-explain" hidden role="status">Yes! sec = 1/cos. The names cross on purpose: secant goes with cosine, cosecant goes with sine.</div>
+  </div>
+
+  <h3>Special Triangles</h3>
+  <div class="gentle"><p>Two specific triangles show up constantly. Their side ratios give "clean" numbers your teacher will expect you to recognize:</p></div>
+  <table class="fact-table">
+    <caption>Special Right Triangle Side Ratios</caption>
+    <thead>
+      <tr><th scope="col">Triangle</th><th scope="col">Sides</th><th scope="col">Key Values</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>45-45-90</strong></td><td>1 : 1 : &radic;2</td><td>sin 45 = cos 45 = &radic;2/2 &asymp; 0.707, &nbsp;tan 45 = 1</td></tr>
+      <tr><td><strong>30-60-90</strong></td><td>1 : &radic;3 : 2</td><td>sin 30 = 1/2, &nbsp;cos 30 = &radic;3/2 &asymp; 0.866</td></tr>
+    </tbody>
+  </table>
+
+  <!-- WORKED: Special triangles -->
+  <div class="worked" aria-label="Worked example: Special triangle problem">
+    <div class="ex-title">Special Triangle Problem: A 45-45-90 triangle has a hypotenuse of 14. Find a leg.</div>
+    <div class="step">
+      <span class="step-label">Step 1: Recall the 45-45-90 ratio</span>
+      Sides are in ratio 1 : 1 : &radic;2. Hypotenuse is &radic;2 times the leg.
+    </div>
+    <div class="step">
+      <span class="step-label">Step 2: Set up the equation</span>
+      <div class="step-math">Leg &times; &radic;2 = 14</div>
+      <div class="step-math">Leg = 14 / &radic;2 = 14&radic;2 / 2 = 7&radic;2</div>
+    </div>
+    <div class="step final">
+      <span class="step-label">Answer</span>
+      Each leg is <strong>7&radic;2 &asymp; 9.90 units</strong>.
+      <span class="step-note">Alternatively: sin(45&deg;) = Leg / 14, so Leg = 14 &times; 0.707 &asymp; 9.90. Same answer!</span>
+    </div>
+  </div>
+
+  <div class="try-it" role="note">
+    <span class="try-it-icon" aria-hidden="true">&#128075; Verify With the Slider</span>
+    <p>Set slider to 30&deg;. sin = 0.500 (that is 1/2). cos = 0.866 (that is &radic;3/2). Now try 45&deg;. Both sin and cos = 0.707 (that is &radic;2/2). You just confirmed the special triangles with your own eyes!</p>
+  </div>
+</div>
+</div>
+
+<!-- ===== UNIT CIRCLE ===== -->
+<div class="tab-content" id="tab-unit-circle" role="tabpanel" aria-labelledby="btn-unit-circle" tabindex="0">
+<div class="card">
+  <h2>The Unit Circle</h2>
+  <div class="gentle">
+    <p>In the triangle tab, trig only worked for angles between 0&deg; and 90&deg; (because those are the only angles inside a right triangle). But what about 120&deg;? Or 270&deg;? The <strong>unit circle</strong> extends trig to work for <em>any</em> angle.</p>
+  </div>
+
+  <h3>What Is It?</h3>
+  <div class="define" role="note" aria-label="Definition: Unit circle">
+    <span class="define-label">New Concept</span>
+    <p>The <strong>unit circle</strong> is a circle with a radius of exactly <strong>1</strong>, centered at the point (0, 0) on a graph. "Unit" just means "one."</p>
+    <p>The key idea: <strong>Every point on this circle is (cos&theta;, sin&theta;).</strong> Cosine = the x-coordinate (horizontal position). Sine = the y-coordinate (vertical position). That is the whole concept.</p>
+  </div>
+  <div class="analogy" role="note">
+    <span class="analogy-icon" aria-hidden="true">💡 Think of it this way:</span>
+    Imagine a ladybug on a clock face, starting at 3 o'clock. She walks counterclockwise. At any moment, her horizontal distance from center is cos(&theta;) and her vertical distance from center is sin(&theta;). You are about to drag the point around the circle and be that ladybug.
+  </div>
+
+  <div class="inline-check" id="ic-u0" role="group" aria-labelledby="ic-u0-label">
+    <div class="ic-label" id="ic-u0-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-u0-q">On the unit circle, cosine tells you the point's:</p>
+    <button class="ic-btn" onclick="checkIC('ic-u0',this,true)" aria-describedby="ic-u0-q">Horizontal (x) position</button>
+    <button class="ic-btn" onclick="checkIC('ic-u0',this,false)" aria-describedby="ic-u0-q">Vertical (y) position</button>
+    <button class="ic-btn" onclick="checkIC('ic-u0',this,false)" aria-describedby="ic-u0-q">Distance from center</button>
+    <div class="ic-explain" hidden role="status">Yes! Cosine = x (horizontal). Sine = y (vertical). The blue line in the diagram shows cosine, the red line shows sine.</div>
+  </div>
+
+  <h3>Click or Drag Around the Circle</h3>
+  <p>Click anywhere on the diagram, or click and drag. Watch the <strong>blue line (cos/x)</strong> and <strong>red line (sin/y)</strong> change. The readout panel updates with the exact values.</p>
+  <div class="canvas-wrap">
+    <canvas id="uc-canvas" width="500" height="500" role="img" aria-label="Interactive unit circle diagram. Click or drag to change the angle." aria-describedby="uc-canvas-desc"></canvas>
+    <div class="canvas-live" aria-live="polite" aria-atomic="true" id="uc-canvas-live"></div>
+    <p class="canvas-desc" id="uc-canvas-desc">Interactive unit circle. Click or drag the point around the circle. The readout panel below shows angle, coordinates, and trig values.</p>
+  </div>
+  <div class="readout" aria-label="Unit circle values">
+    <div class="readout-item"><div class="label">Angle</div><div class="value" id="uc-deg" aria-live="polite">0&deg;</div></div>
+    <div class="readout-item"><div class="label">Radians</div><div class="value" id="uc-rad" aria-live="polite">0</div></div>
+    <div class="readout-item"><div class="label">cos&theta; (x)</div><div class="value" id="uc-cos" aria-live="polite">1.000</div></div>
+    <div class="readout-item"><div class="label">sin&theta; (y)</div><div class="value" id="uc-sin" aria-live="polite">0.000</div></div>
+    <div class="readout-item"><div class="label">tan&theta;</div><div class="value" id="uc-tan" aria-live="polite">0.000</div></div>
+    <div class="readout-item"><div class="label">Quadrant</div><div class="value" id="uc-quad" aria-live="polite">Right</div></div>
+  </div>
+
+  <div class="try-it" role="note">
+    <span class="try-it-icon" aria-hidden="true">&#128075; Try These Three Points</span>
+    <p>1. Click near the <strong>top</strong> (90&deg;). Sin = 1, cos = 0. The point is straight up: all "y," no "x."</p>
+    <p>2. Click the <strong>left</strong> (180&deg;). Sin = 0, cos = &minus;1. Cosine is negative because the point is left of center.</p>
+    <p>3. <strong>Drag slowly</strong> all the way around. Watch sine grow and shrink like a wave. That IS the sine wave being born!</p>
+  </div>
+
+  <h3>What Are Radians?</h3>
+  <div class="define" role="note" aria-label="Definition: Radians">
+    <span class="define-label">New Word</span>
+    <p><strong>Radians</strong> = another way to measure angles. One full circle = 360&deg; = 2&pi; radians (&asymp; 6.28). Half circle = 180&deg; = &pi;. Quarter = 90&deg; = &pi;/2.</p>
+    <p><strong>To convert:</strong> degrees &times; (&pi;/180) = radians. &nbsp; Radians &times; (180/&pi;) = degrees.</p>
+  </div>
+
+  <!-- WORKED: Radian conversions -->
+  <div class="worked-series">
+    <div class="worked" aria-label="Worked example: Degree to radian conversion">
+      <div class="ex-title">Convert 270&deg; to radians</div>
+      <div class="step">
+        <span class="step-label">Formula</span>
+        <div class="step-math">Radians = Degrees &times; (&pi; / 180)</div>
+      </div>
+      <div class="step">
+        <span class="step-label">Plug in</span>
+        <div class="step-math">Radians = 270 &times; (&pi; / 180) = (270/180)&pi; = (3/2)&pi;</div>
+      </div>
+      <div class="step final">
+        <span class="step-label">Answer</span>
+        270&deg; = <strong>3&pi;/2 radians</strong> &asymp; 4.71. Verify: drag to the bottom of the unit circle. Radians shows "1.50&pi;" or 3&pi;/2.
+      </div>
+    </div>
+    <div class="worked" aria-label="Worked example: Radian to degree conversion">
+      <div class="ex-title">Convert 5&pi;/6 radians to degrees</div>
+      <div class="step">
+        <span class="step-label">Formula</span>
+        <div class="step-math">Degrees = Radians &times; (180 / &pi;)</div>
+      </div>
+      <div class="step">
+        <span class="step-label">Plug in</span>
+        <div class="step-math">Degrees = (5&pi;/6) &times; (180/&pi;) = (5 &times; 180) / 6 = 900 / 6</div>
+      </div>
+      <div class="step final">
+        <span class="step-label">Answer</span>
+        5&pi;/6 radians = <strong>150&deg;</strong>. The &pi;'s cancel out. You are left with simple arithmetic.
+      </div>
+    </div>
+  </div>
+
+  <div class="inline-check" id="ic-u1" role="group" aria-labelledby="ic-u1-label">
+    <div class="ic-label" id="ic-u1-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-u1-q">180&deg; equals how many radians?</p>
+    <button class="ic-btn" onclick="checkIC('ic-u1',this,false)" aria-describedby="ic-u1-q">&pi;/2</button>
+    <button class="ic-btn" onclick="checkIC('ic-u1',this,true)" aria-describedby="ic-u1-q">&pi;</button>
+    <button class="ic-btn" onclick="checkIC('ic-u1',this,false)" aria-describedby="ic-u1-q">2&pi;</button>
+    <div class="ic-explain" hidden role="status">Yes! 180&deg; = &pi; radians. This is the most important conversion to memorize. Try: 180 &times; (&pi;/180) = &pi;.</div>
+  </div>
+
+  <h3>The Four Quadrants</h3>
+  <div class="gentle"><p>The circle is divided into four sections called <strong>quadrants</strong>. Knowing the quadrant tells you whether sin and cos are positive or negative.</p></div>
+  <div class="mnemonic" role="note" aria-label="ASTC mnemonic">
+    <strong>"All Students Take Calculus"</strong> = which functions are positive:<br><br>
+    <strong>QI</strong> (top-right, 0&deg;&ndash;90&deg;) = <strong>A</strong>LL positive<br>
+    <strong>QII</strong> (top-left, 90&deg;&ndash;180&deg;) = only <strong>S</strong>INE positive<br>
+    <strong>QIII</strong> (bottom-left, 180&deg;&ndash;270&deg;) = only <strong>T</strong>ANGENT positive<br>
+    <strong>QIV</strong> (bottom-right, 270&deg;&ndash;360&deg;) = only <strong>C</strong>OSINE positive
+  </div>
+
+  <!-- WORKED: Using ASTC quadrant signs -->
+  <div class="worked" aria-label="Worked example: Using quadrant signs">
+    <div class="ex-title">Find sin(210&deg;) and cos(210&deg;) without a calculator</div>
+    <div class="step">
+      <span class="step-label">Step 1: Find the quadrant</span>
+      210&deg; is between 180&deg; and 270&deg; &rarr; <strong>QIII</strong>. In QIII, only tangent is positive. Both sin and cos are <strong>negative</strong>.
+    </div>
+    <div class="step">
+      <span class="step-label">Step 2: Find the reference angle</span>
+      QIII formula: reference = angle &minus; 180&deg; = 210 &minus; 180 = <strong>30&deg;</strong>.
+    </div>
+    <div class="step">
+      <span class="step-label">Step 3: Look up the reference angle values</span>
+      sin(30&deg;) = 1/2. cos(30&deg;) = &radic;3/2. These are your "raw" numbers.
+    </div>
+    <div class="step final">
+      <span class="step-label">Step 4: Apply the QIII signs (both negative)</span>
+      <strong>sin(210&deg;) = &minus;1/2 = &minus;0.5</strong><br>
+      <strong>cos(210&deg;) = &minus;&radic;3/2 &asymp; &minus;0.866</strong><br>
+      <span class="step-note">Verify: drag to 210&deg; on the unit circle. You should see exactly these values.</span>
+    </div>
+  </div>
+
+  <div class="try-it" role="note">
+    <span class="try-it-icon" aria-hidden="true">&#128075; Try It</span>
+    <p>Drag to about <strong>150&deg;</strong> (QII). Sine is positive (~0.5) but cosine is negative (~&minus;0.866). That matches "Students" = only Sine positive in QII.</p>
+  </div>
+
+  <div class="inline-check" id="ic-u2" role="group" aria-labelledby="ic-u2-label">
+    <div class="ic-label" id="ic-u2-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-u2-q">At 240&deg; (QIII), which function is positive?</p>
+    <button class="ic-btn" onclick="checkIC('ic-u2',this,false)" aria-describedby="ic-u2-q">Sine</button>
+    <button class="ic-btn" onclick="checkIC('ic-u2',this,false)" aria-describedby="ic-u2-q">Cosine</button>
+    <button class="ic-btn" onclick="checkIC('ic-u2',this,true)" aria-describedby="ic-u2-q">Tangent</button>
+    <div class="ic-explain" hidden role="status">Correct! QIII = "Take" = Tangent. Both sin and cos are negative, but negative divided by negative = positive tangent.</div>
+  </div>
+
+  <h3>Key Angles</h3>
+  <table class="fact-table">
+    <caption>Unit Circle Key Angle Reference</caption>
+    <thead>
+      <tr><th scope="col">Degrees</th><th scope="col">Radians</th><th scope="col">(cos, sin)</th><th scope="col">Location</th></tr>
+    </thead>
+    <tbody>
+      <tr class="highlight"><td>0&deg;</td><td>0</td><td>(1, 0)</td><td>Right</td></tr>
+      <tr><td>30&deg;</td><td>&pi;/6</td><td>(0.866, 0.500)</td><td>Upper-right</td></tr>
+      <tr class="highlight"><td>45&deg;</td><td>&pi;/4</td><td>(0.707, 0.707)</td><td>Diagonal</td></tr>
+      <tr><td>60&deg;</td><td>&pi;/3</td><td>(0.500, 0.866)</td><td>Upper-right</td></tr>
+      <tr class="highlight"><td>90&deg;</td><td>&pi;/2</td><td>(0, 1)</td><td>Top</td></tr>
+      <tr class="highlight"><td>180&deg;</td><td>&pi;</td><td>(&minus;1, 0)</td><td>Left</td></tr>
+      <tr class="highlight"><td>270&deg;</td><td>3&pi;/2</td><td>(0, &minus;1)</td><td>Bottom</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Reference Angles</h3>
+  <div class="define" role="note" aria-label="Definition: Reference angle">
+    <span class="define-label">New Concept</span>
+    <p>A <strong>reference angle</strong> is the acute angle (under 90&deg;) between your angle's line and the x-axis. Same trig values, just possibly different signs.</p>
+    <p><strong>How to find it:</strong> QII: 180&deg; &minus; angle. &nbsp; QIII: angle &minus; 180&deg;. &nbsp; QIV: 360&deg; &minus; angle.</p>
+  </div>
+
+  <div class="inline-check" id="ic-u3" role="group" aria-labelledby="ic-u3-label">
+    <div class="ic-label" id="ic-u3-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-u3-q">Reference angle for 225&deg;?</p>
+    <button class="ic-btn" onclick="checkIC('ic-u3',this,false)" aria-describedby="ic-u3-q">25&deg;</button>
+    <button class="ic-btn" onclick="checkIC('ic-u3',this,true)" aria-describedby="ic-u3-q">45&deg;</button>
+    <button class="ic-btn" onclick="checkIC('ic-u3',this,false)" aria-describedby="ic-u3-q">135&deg;</button>
+    <div class="ic-explain" hidden role="status">Yes! 225&deg; is in QIII. Reference = 225 &minus; 180 = 45&deg;. So sin(225&deg;) and cos(225&deg;) have the same numbers as 45&deg;, but both negative (QIII).</div>
+  </div>
+</div>
+</div>
+
+<!-- ===== GRAPHS ===== -->
+<div class="tab-content" id="tab-graphs" role="tabpanel" aria-labelledby="btn-graphs" tabindex="0">
+<div class="card">
+  <h2>Wave Graphs</h2>
+  <div class="gentle">
+    <p>When you dragged the point around the unit circle, you saw sine go up and down like a wave. If you "unrolled" that circular motion into a straight line, you get the <strong>sine wave</strong>: one of the most important shapes in all of math and science. Sound, light, ocean tides, even your heartbeat, all make this shape.</p>
+    <p>Here you will build a wave from scratch using four sliders. <strong>Change ONE slider at a time</strong> so you can see exactly what each one does.</p>
+  </div>
+
+  <h3>The Four Controls</h3>
+  <div class="define" role="note" aria-label="Wave parameters explained">
+    <span class="define-label">What each slider does</span>
+    <p><strong>Amplitude (A)</strong> = How tall the wave is from the middle to the top. |A| is always positive. Negative A flips the wave upside down.</p>
+    <p><strong>B value (frequency)</strong> = How many complete cycles fit in a standard space. Period = 2&pi; / |B|. Bigger B = shorter period = more waves packed together.</p>
+    <p><strong>Phase shift (C)</strong> = How far the wave slides left or right. Shift = &minus;C/B.</p>
+    <p><strong>Vertical shift (D)</strong> = How far the wave moves up or down. Changes the midline (center line) of the wave.</p>
+  </div>
+
+  <div class="controls" role="group" aria-label="Wave graph controls">
+    <div class="control-group">
+      <label for="gA">A (amplitude): <span class="control-value" id="gA-val" aria-live="polite">1</span></label>
+      <input type="range" id="gA" min="-4" max="4" value="1" step="0.5" oninput="updateGraph()" aria-label="Amplitude A" aria-valuemin="-4" aria-valuemax="4" aria-valuenow="1">
+    </div>
+    <div class="control-group">
+      <label for="gB">B (frequency): <span class="control-value" id="gB-val" aria-live="polite">1</span></label>
+      <input type="range" id="gB" min="0.5" max="4" value="1" step="0.5" oninput="updateGraph()" aria-label="Frequency B" aria-valuemin="0.5" aria-valuemax="4" aria-valuenow="1">
+    </div>
+    <div class="control-group">
+      <label for="gC">C (phase shift): <span class="control-value" id="gC-val" aria-live="polite">0</span></label>
+      <input type="range" id="gC" min="-6.28" max="6.28" value="0" step="0.1" oninput="updateGraph()" aria-label="Phase shift C" aria-valuemin="-6.28" aria-valuemax="6.28" aria-valuenow="0">
+    </div>
+    <div class="control-group">
+      <label for="gD">D (vertical shift): <span class="control-value" id="gD-val" aria-live="polite">0</span></label>
+      <input type="range" id="gD" min="-3" max="3" value="0" step="0.5" oninput="updateGraph()" aria-label="Vertical shift D" aria-valuemin="-3" aria-valuemax="3" aria-valuenow="0">
+    </div>
+  </div>
+  <div style="text-align:center;margin:0.5rem 0;" role="group" aria-label="Function type selection">
+    <button class="quiz-btn" id="btn-sin" aria-pressed="true" onclick="setFunc('sin')">y = A sin(Bx+C)+D</button>
+    <button class="quiz-btn" id="btn-cos" aria-pressed="false" onclick="setFunc('cos')">y = A cos(Bx+C)+D</button>
+    <button class="quiz-btn" id="btn-tan" aria-pressed="false" onclick="setFunc('tan')">y = A tan(Bx+C)+D</button>
+  </div>
+  <div class="canvas-wrap">
+    <canvas id="graph-canvas" width="700" height="360" role="img" aria-label="Wave function graph" aria-describedby="graph-canvas-desc"></canvas>
+    <div class="canvas-live" aria-live="polite" aria-atomic="true" id="graph-canvas-live"></div>
+    <p class="canvas-desc" id="graph-canvas-desc">Wave function graph. Adjust the sliders above to modify the wave. Key values shown in the readout panel below.</p>
+  </div>
+  <div class="readout" aria-label="Wave function properties">
+    <div class="readout-item"><div class="label">Amplitude</div><div class="value" id="g-amp" aria-live="polite">1</div></div>
+    <div class="readout-item"><div class="label">Period</div><div class="value" id="g-period" aria-live="polite">6.28</div></div>
+    <div class="readout-item"><div class="label">Phase Shift</div><div class="value" id="g-phase" aria-live="polite">0</div></div>
+    <div class="readout-item"><div class="label">Midline</div><div class="value" id="g-mid" aria-live="polite">y = 0</div></div>
+  </div>
+
+  <h3>Guided Experiments</h3>
+  <div class="try-it" role="note"><span class="try-it-icon" aria-hidden="true">&#128075; Experiment 1 (A):</span> Keep B=1, C=0, D=0. Increase A to 3. Wave gets taller. Set A to &minus;2: it flips upside down AND gets taller. <strong>|A| = height. Negative A = flip.</strong></div>
+  <div class="try-it" role="note"><span class="try-it-icon" aria-hidden="true">&#128075; Experiment 2 (B):</span> Reset A=1. Set B to 2: wave "squishes." Period drops from 6.28 to 3.14. Set B=0.5: wave stretches. <strong>Bigger B = shorter period.</strong></div>
+  <div class="try-it" role="note"><span class="try-it-icon" aria-hidden="true">&#128075; Experiment 3 (C):</span> Reset B=1. Slide C: whole wave slides left/right without changing shape.</div>
+  <div class="try-it" role="note"><span class="try-it-icon" aria-hidden="true">&#128075; Experiment 4 (D):</span> Reset C=0. Set D=2: wave moves up. The dashed line is the new midline.</div>
+
+  <!-- WORKED: Identifying wave properties from an equation -->
+  <h3>Worked Examples: Reading a Wave Equation</h3>
+  <div class="worked-series">
+    <div class="worked" aria-label="Worked example: Identify wave properties">
+      <div class="ex-title">Identify all properties of y = 3sin(2x &minus; &pi;) + 1</div>
+      <div class="step">
+        <span class="step-label">Identify A, B, C, D by matching the formula</span>
+        The formula is y = A sin(Bx + C) + D.<br>
+        Here: A = 3, B = 2, C = &minus;&pi;, D = 1
+        <span class="step-note">Careful: the formula inside is (2x &minus; &pi;), which equals (2x + (&minus;&pi;)). So C = &minus;&pi;.</span>
+      </div>
+      <div class="step">
+        <span class="step-label">Amplitude</span>
+        <div class="step-math">|A| = |3| = 3</div>
+        Wave goes from &minus;3 to +3 around the midline.
+      </div>
+      <div class="step">
+        <span class="step-label">Period</span>
+        <div class="step-math">Period = 2&pi; / |B| = 2&pi; / 2 = &pi; &asymp; 3.14</div>
+      </div>
+      <div class="step">
+        <span class="step-label">Phase Shift</span>
+        <div class="step-math">Phase shift = &minus;C / B = &minus;(&minus;&pi;) / 2 = &pi;/2 &asymp; 1.57 (shifted RIGHT)</div>
+        <span class="step-note">Positive shift = wave moved right. Negative = moved left.</span>
+      </div>
+      <div class="step final">
+        <span class="step-label">Midline and Summary</span>
+        Midline: y = D = 1<br>
+        <strong>Summary: amplitude 3, period &pi;, shifted right &pi;/2, centered on y = 1.</strong>
+      </div>
+    </div>
+
+    <div class="worked" aria-label="Worked example: Write equation from graph description">
+      <div class="ex-title">Write the equation: amplitude 2, period 4&pi;, midline y = &minus;1, no horizontal shift, cosine function</div>
+      <div class="step">
+        <span class="step-label">Step 1: Find A</span>
+        Amplitude = 2, so A = 2.
+      </div>
+      <div class="step">
+        <span class="step-label">Step 2: Find B from the period</span>
+        <div class="step-math">Period = 2&pi; / B &rarr; 4&pi; = 2&pi; / B &rarr; B = 2&pi; / 4&pi; = 1/2</div>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 3: No shift means C = 0. Midline y = &minus;1 means D = &minus;1.</span>
+      </div>
+      <div class="step final">
+        <span class="step-label">Answer</span>
+        <div class="step-math">y = 2cos((1/2)x) &minus; 1</div>
+        Set the sliders (A=2, B=0.5, C=0, D=-1, cosine) and verify the graph matches this description.
+      </div>
+    </div>
+  </div>
+
+  <div class="inline-check" id="ic-g1" role="group" aria-labelledby="ic-g1-label">
+    <div class="ic-label" id="ic-g1-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-g1-q">If B = 3, what is the period?</p>
+    <button class="ic-btn" onclick="checkIC('ic-g1',this,false)" aria-describedby="ic-g1-q">3&pi;</button>
+    <button class="ic-btn" onclick="checkIC('ic-g1',this,true)" aria-describedby="ic-g1-q">2&pi;/3 (&asymp; 2.09)</button>
+    <button class="ic-btn" onclick="checkIC('ic-g1',this,false)" aria-describedby="ic-g1-q">6&pi;</button>
+    <div class="ic-explain" hidden role="status">Yes! Period = 2&pi;/|B| = 2&pi;/3 &asymp; 2.09. Bigger B = more cycles = shorter period.</div>
+  </div>
+
+  <div class="formula-box" role="note" aria-label="Wave formula reference">
+    y = <strong>A</strong> sin(<strong>B</strong>x + <strong>C</strong>) + <strong>D</strong><br><br>
+    Amplitude = |A|<br>Period = 2&pi; / |B|<br>Phase shift = &minus;C / B<br>Midline = y = D
+  </div>
+
+  <div class="mistake" role="alert">
+    <span class="mistake-icon" aria-hidden="true">&#9888;&#65039; Watch Out! Phase shift trap:</span>
+    In y = sin(2x &minus; 4), shift is NOT 4. It is &minus;(&minus;4)/2 = 2 (right). Factor first: y = sin(2(x &minus; 2)). The shift is clearly 2.
+  </div>
+
+  <div class="inline-check" id="ic-g2" role="group" aria-labelledby="ic-g2-label">
+    <div class="ic-label" id="ic-g2-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-g2-q">y = &minus;2sin(x) + 1 has amplitude 2, is flipped, and its midline is:</p>
+    <button class="ic-btn" onclick="checkIC('ic-g2',this,false)" aria-describedby="ic-g2-q">y = &minus;2</button>
+    <button class="ic-btn" onclick="checkIC('ic-g2',this,false)" aria-describedby="ic-g2-q">y = 0</button>
+    <button class="ic-btn" onclick="checkIC('ic-g2',this,true)" aria-describedby="ic-g2-q">y = 1</button>
+    <div class="ic-explain" hidden role="status">Right! Midline = D = 1. Amplitude = |&minus;2| = 2. The negative flips the wave. The +1 shifts it up.</div>
+  </div>
+</div>
+</div>
+
+<!-- ===== IDENTITIES ===== -->
+<div class="tab-content" id="tab-identities" role="tabpanel" aria-labelledby="btn-identities" tabindex="0">
+<div class="card">
+  <h2>Trig Identities</h2>
+  <div class="gentle">
+    <p>An <strong>identity</strong> is an equation that is <strong>always true</strong>, no matter what angle you plug in. It is not something you solve. It is a fact you use to rewrite expressions in different forms.</p>
+  </div>
+  <div class="analogy" role="note">
+    <span class="analogy-icon" aria-hidden="true">💡 Think of it this way:</span>
+    $1.00 = 4 quarters = 10 dimes = 100 pennies. Same value, different look. You pick whichever form is most useful. Trig identities work the same way.
+  </div>
+
+  <h3>The Most Important Identity</h3>
+  <div class="big-reveal" role="note" aria-label="Pythagorean identity">
+    <strong>sin&sup2;(&theta;) + cos&sup2;(&theta;) = 1</strong><br><br>The <strong>Pythagorean Identity</strong>. ALWAYS true. Every angle. No exceptions.
+  </div>
+
+  <div class="define" role="note">
+    <span class="define-label">Wait, what does sin&sup2; mean?</span>
+    <p><strong>sin&sup2;(&theta;)</strong> = [sin(&theta;)]&sup2;. Find sine first, THEN square the result. Example: sin&sup2;(30&deg;) = (0.5)&sup2; = 0.25.</p>
+  </div>
+  <div class="define" role="note">
+    <span class="define-label">Why does it work?</span>
+    <p>On the unit circle, point = (cos&theta;, sin&theta;), distance from center = 1. Pythagorean theorem: x&sup2; + y&sup2; = r&sup2;. Since r = 1: cos&sup2;&theta; + sin&sup2;&theta; = 1.</p>
+  </div>
+
+  <div class="try-it" role="note">
+    <span class="try-it-icon" aria-hidden="true">&#128075; Verify</span>
+    <p>Go to the Unit Circle tab. Pick any angle. Square sin and cos, add them. You get 1. Try 30&deg;: (0.5)&sup2; + (0.866)&sup2; = 0.25 + 0.75 = 1.0. Try 210&deg;: (&minus;0.5)&sup2; + (&minus;0.866)&sup2; = 0.25 + 0.75 = 1.0. Always works!</p>
+  </div>
+
+  <div class="inline-check" id="ic-i1" role="group" aria-labelledby="ic-i1-label">
+    <div class="ic-label" id="ic-i1-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-i1-q">If sin(&theta;) = 0.6, what is cos&sup2;(&theta;)?</p>
+    <button class="ic-btn" onclick="checkIC('ic-i1',this,false)" aria-describedby="ic-i1-q">0.4</button>
+    <button class="ic-btn" onclick="checkIC('ic-i1',this,true)" aria-describedby="ic-i1-q">0.64</button>
+    <button class="ic-btn" onclick="checkIC('ic-i1',this,false)" aria-describedby="ic-i1-q">0.8</button>
+    <div class="ic-explain" hidden role="status">Yes! (0.6)&sup2; + cos&sup2; = 1 &rarr; 0.36 + cos&sup2; = 1 &rarr; cos&sup2; = 0.64.</div>
+  </div>
+
+  <h3>Rearrangements</h3>
+  <div class="formula-box" role="note">sin&sup2;(&theta;) = 1 &minus; cos&sup2;(&theta;)<br>cos&sup2;(&theta;) = 1 &minus; sin&sup2;(&theta;)<br><br><span style="font-size:0.85em;color:var(--text2);">Same identity, just rearranged. These come up constantly in simplification problems.</span></div>
+
+  <h3>Other Pythagorean Identities</h3>
+  <div class="gentle"><p>Divide sin&sup2; + cos&sup2; = 1 by cos&sup2; to get one; divide by sin&sup2; to get the other:</p></div>
+  <div class="formula-box" role="note">1 + tan&sup2;(&theta;) = sec&sup2;(&theta;)<br>1 + cot&sup2;(&theta;) = csc&sup2;(&theta;)</div>
+
+  <!-- WORKED: Full identity example series -->
+  <h3>Worked Examples: Using Identities</h3>
+  <div class="worked-series">
+    <div class="worked" aria-label="Worked example: Finding cos from sin">
+      <div class="ex-title">sin(&theta;) = 3/5, &theta; in QI. Find cos(&theta;).</div>
+      <div class="step"><span class="step-label">Step 1</span>sin&sup2; + cos&sup2; = 1</div>
+      <div class="step"><span class="step-label">Step 2</span>(3/5)&sup2; + cos&sup2; = 1 &rarr; 9/25 + cos&sup2; = 1</div>
+      <div class="step"><span class="step-label">Step 3</span>cos&sup2; = 1 &minus; 9/25 = 16/25 &rarr; cos = &plusmn;4/5</div>
+      <div class="step final"><span class="step-label">Step 4</span>QI = all positive &rarr; <strong>cos(&theta;) = 4/5 = 0.8</strong></div>
+    </div>
+
+    <div class="worked" aria-label="Worked example: Simplify a trig expression">
+      <div class="ex-title">Simplify: (1 &minus; cos&sup2;x) / sin(x)</div>
+      <div class="step">
+        <span class="step-label">Step 1: Recognize the numerator</span>
+        1 &minus; cos&sup2;x = sin&sup2;x (this IS the Pythagorean identity rearranged)
+        <div class="step-math">(1 &minus; cos&sup2;x) / sin(x) = sin&sup2;x / sin(x)</div>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 2: Cancel one sine from top and bottom</span>
+        <div class="step-math">sin&sup2;x / sinx = sinx</div>
+      </div>
+      <div class="step final">
+        <span class="step-label">Answer</span>
+        <strong>sin(x)</strong>. The entire expression simplifies to just sine.
+      </div>
+    </div>
+
+    <div class="worked" aria-label="Worked example: Prove an identity">
+      <div class="ex-title">Prove: tan(x) &times; cos(x) = sin(x)</div>
+      <div class="step">
+        <span class="step-label">Strategy: Work on one side only</span>
+        Take the left side: tan(x) &times; cos(x). Replace tan(x) with its definition.
+        <div class="step-math">tan(x) = sin(x)/cos(x)</div>
+      </div>
+      <div class="step">
+        <span class="step-label">Substitute</span>
+        <div class="step-math">[sin(x)/cos(x)] &times; cos(x)</div>
+        The cos(x) on top and bottom cancel.
+      </div>
+      <div class="step final">
+        <span class="step-label">Result</span>
+        <div class="step-math">= sin(x)</div>
+        Left side = right side. <strong>Identity proven.</strong> <span class="step-note">Always start with the more complicated side and simplify toward the simpler side.</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Sum, Difference, and Double-Angle</h3>
+  <div class="mistake" role="alert">
+    <span class="mistake-icon" aria-hidden="true">&#9888;&#65039; Watch Out!</span>
+    <strong>sin(A + B) &ne; sin(A) + sin(B)!</strong> Quick proof: sin(30+60) = sin(90) = 1. But sin(30)+sin(60) = 0.5 + 0.866 = 1.366. Not equal! You must use the formulas below.
+  </div>
+  <div class="formula-box" role="note" aria-label="Sum, difference, and double angle formulas">
+    <strong>Sum/Difference:</strong><br>
+    sin(A &plusmn; B) = sinA cosB &plusmn; cosA sinB<br>
+    cos(A &plusmn; B) = cosA cosB &#8723; sinA sinB<br><br>
+    <strong>Double-Angle:</strong><br>
+    sin(2&theta;) = 2 sin&theta; cos&theta;<br>
+    cos(2&theta;) = cos&sup2;&theta; &minus; sin&sup2;&theta; = 2cos&sup2;&theta; &minus; 1 = 1 &minus; 2sin&sup2;&theta;<br><br>
+    <strong>Half-Angle:</strong><br>
+    sin(&theta;/2) = &plusmn;&radic;[(1 &minus; cos&theta;)/2]<br>
+    cos(&theta;/2) = &plusmn;&radic;[(1 + cos&theta;)/2]
+  </div>
+
+  <!-- WORKED: Double angle formula -->
+  <div class="worked" aria-label="Worked example: Double angle formula application">
+    <div class="ex-title">If sin&theta; = 3/5 (QI), find sin(2&theta;) and cos(2&theta;)</div>
+    <div class="step">
+      <span class="step-label">Step 1: We already know sin = 3/5. Find cos first.</span>
+      From previous example: cos&theta; = 4/5 (QI, positive).
+    </div>
+    <div class="step">
+      <span class="step-label">Step 2: Apply sin(2&theta;) = 2 sin&theta; cos&theta;</span>
+      <div class="step-math">sin(2&theta;) = 2 &times; (3/5) &times; (4/5) = 24/25</div>
+    </div>
+    <div class="step">
+      <span class="step-label">Step 3: Apply cos(2&theta;) = 1 &minus; 2sin&sup2;&theta;</span>
+      <div class="step-math">cos(2&theta;) = 1 &minus; 2(3/5)&sup2; = 1 &minus; 2(9/25) = 1 &minus; 18/25 = 7/25</div>
+    </div>
+    <div class="step final">
+      <span class="step-label">Answers</span>
+      sin(2&theta;) = <strong>24/25</strong>, cos(2&theta;) = <strong>7/25</strong>
+    </div>
+  </div>
+
+  <div class="inline-check" id="ic-i2" role="group" aria-labelledby="ic-i2-label">
+    <div class="ic-label" id="ic-i2-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-i2-q">sin(2&theta;) equals:</p>
+    <button class="ic-btn" onclick="checkIC('ic-i2',this,false)" aria-describedby="ic-i2-q">2 sin(&theta;)</button>
+    <button class="ic-btn" onclick="checkIC('ic-i2',this,true)" aria-describedby="ic-i2-q">2 sin(&theta;) cos(&theta;)</button>
+    <button class="ic-btn" onclick="checkIC('ic-i2',this,false)" aria-describedby="ic-i2-q">sin(&theta;) + sin(&theta;)</button>
+    <div class="ic-explain" hidden role="status">Yes! sin(2&theta;) = 2sin(&theta;)cos(&theta;). The double-angle formula. Note: 2sin(&theta;) alone is NOT the same thing.</div>
+  </div>
+</div>
+</div>
+
+<!-- ===== EQUATIONS ===== -->
+<div class="tab-content" id="tab-equations" role="tabpanel" aria-labelledby="btn-equations" tabindex="0">
+<div class="card">
+  <h2>Solving Trig Equations</h2>
+  <div class="gentle">
+    <p>A trig equation asks: "For what angle(s) is this true?" Because trig functions repeat (waves go forever), there are usually <strong>multiple answers</strong>. The method is always the same three steps:</p>
+  </div>
+  <div class="define" role="note" aria-label="Three-step method for trig equations">
+    <span class="define-label">The 3-Step Method</span>
+    <p><strong>Step 1:</strong> Isolate the trig function (get sin(x) or cos(x) alone on one side).</p>
+    <p><strong>Step 2:</strong> Find the reference angle (what QI angle gives that value?).</p>
+    <p><strong>Step 3:</strong> Find ALL solutions (which quadrants work? use ASTC).</p>
+  </div>
+
+  <div class="worked-series">
+    <div class="worked" aria-label="Worked example: Basic sine equation">
+      <div class="ex-title">Solve: 2sin(x) &minus; 1 = 0 on [0, 2&pi;)</div>
+      <div class="step"><span class="step-label">Step 1: Isolate sin</span>
+        <div class="step-math">2sin(x) = 1 &rarr; sin(x) = 1/2</div>
+      </div>
+      <div class="step"><span class="step-label">Step 2: Reference angle</span>
+        sin(?) = 1/2 &rarr; reference = 30&deg; = &pi;/6
+        <span class="step-note">This is a "clean" value from the special triangles. Memorize it!</span>
+      </div>
+      <div class="step"><span class="step-label">Step 3: Quadrants where sine is positive</span>
+        ASTC: sine positive in QI and QII.<br>
+        QI: x = &pi;/6<br>
+        QII: x = &pi; &minus; &pi;/6 = 5&pi;/6
+      </div>
+      <div class="step final"><span class="step-label">Answer</span><strong>x = &pi;/6 and x = 5&pi;/6</strong></div>
+    </div>
+
+    <div class="worked" aria-label="Worked example: Negative cosine equation">
+      <div class="ex-title">Solve: cos(x) = &minus;1/2 on [0, 2&pi;)</div>
+      <div class="step">
+        <span class="step-label">Step 1: Already isolated</span>cos(x) = &minus;1/2
+      </div>
+      <div class="step">
+        <span class="step-label">Step 2: Reference angle</span>
+        cos(?) = 1/2 (ignore the negative for now) &rarr; reference = 60&deg; = &pi;/3
+      </div>
+      <div class="step">
+        <span class="step-label">Step 3: Cosine is NEGATIVE in QII and QIII</span>
+        QII: x = &pi; &minus; &pi;/3 = 2&pi;/3<br>
+        QIII: x = &pi; + &pi;/3 = 4&pi;/3
+      </div>
+      <div class="step final"><span class="step-label">Answer</span><strong>x = 2&pi;/3 and x = 4&pi;/3</strong></div>
+    </div>
+
+    <div class="worked" aria-label="Worked example: Quadratic trig equation">
+      <div class="ex-title">Solve: 2cos&sup2;(x) &minus; cos(x) &minus; 1 = 0 on [0, 2&pi;)</div>
+      <div class="step">
+        <span class="step-label">Step 1: Spot the quadratic</span>
+        Let u = cos(x). Then: 2u&sup2; &minus; u &minus; 1 = 0.
+        <span class="step-note">A "quadratic" = equation with u&sup2;. Solve by factoring or the quadratic formula.</span>
+      </div>
+      <div class="step">
+        <span class="step-label">Step 2: Factor</span>
+        <div class="step-math">(2u+1)(u&minus;1)=0 &rarr; u=&minus;1/2 or u=1</div>
+        So cos(x) = &minus;1/2 or cos(x) = 1.
+      </div>
+      <div class="step">
+        <span class="step-label">Step 3a: Solve cos(x) = &minus;1/2</span>
+        Reference = 60&deg;. Negative in QII, QIII: x = 2&pi;/3, 4&pi;/3
+      </div>
+      <div class="step">
+        <span class="step-label">Step 3b: Solve cos(x) = 1</span>
+        cos = 1 only at x = 0 (right side of unit circle).
+      </div>
+      <div class="step final"><span class="step-label">Answer</span><strong>x = 0, 2&pi;/3, 4&pi;/3</strong></div>
+    </div>
+
+    <div class="worked" aria-label="Worked example: All solutions general form">
+      <div class="ex-title">Find ALL solutions (not just 0 to 2&pi;) of sin(x) = &radic;3/2</div>
+      <div class="step">
+        <span class="step-label">Step 1: Reference angle</span>
+        sin(?) = &radic;3/2 &rarr; reference = 60&deg; = &pi;/3
+      </div>
+      <div class="step">
+        <span class="step-label">Step 2: Solutions in [0, 2&pi;)</span>
+        QI: x = &pi;/3. QII: x = &pi; &minus; &pi;/3 = 2&pi;/3
+      </div>
+      <div class="step final">
+        <span class="step-label">Step 3: Add all repeating cycles using + 2&pi;k</span>
+        <div class="step-math">x = &pi;/3 + 2&pi;k, &nbsp; or &nbsp; x = 2&pi;/3 + 2&pi;k</div>
+        where k is any integer (0, &plusmn;1, &plusmn;2, ...). This gives all solutions from negative infinity to positive infinity.
+      </div>
+    </div>
+  </div>
+
+  <div class="inline-check" id="ic-e1" role="group" aria-labelledby="ic-e1-label">
+    <div class="ic-label" id="ic-e1-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-e1-q">Solving cos(x) = &minus;1/2. Cosine is negative in which quadrants?</p>
+    <button class="ic-btn" onclick="checkIC('ic-e1',this,false)" aria-describedby="ic-e1-q">QI and QII</button>
+    <button class="ic-btn" onclick="checkIC('ic-e1',this,true)" aria-describedby="ic-e1-q">QII and QIII</button>
+    <button class="ic-btn" onclick="checkIC('ic-e1',this,false)" aria-describedby="ic-e1-q">QIII and QIV</button>
+    <div class="ic-explain" hidden role="status">Correct! Cosine is positive in QI and QIV only. So it is NEGATIVE in QII and QIII.</div>
+  </div>
+
+  <div class="mistake" role="alert">
+    <span class="mistake-icon" aria-hidden="true">&#9888;&#65039; Watch Out! Never divide by a trig function!</span>
+    sin(x)cos(x) = sin(x) &rarr; do NOT divide both sides by sin(x). You lose the solutions where sin(x) = 0. Instead: sin(x)cos(x) &minus; sin(x) = 0 &rarr; sin(x)[cos(x) &minus; 1] = 0. Factor it!
+  </div>
+</div>
+</div>
+
+<!-- ===== LAWS ===== -->
+<div class="tab-content" id="tab-law" role="tabpanel" aria-labelledby="btn-law" tabindex="0">
+<div class="card">
+  <h2>Law of Sines and Law of Cosines</h2>
+  <div class="gentle"><p>SOH-CAH-TOA only works for right triangles. For <em>any other</em> triangle, use these two laws.</p></div>
+
+  <h3>Which One Do I Use?</h3>
+  <div class="define" role="note" aria-label="Decision rule for Law of Sines vs Cosines">
+    <span class="define-label">Decision Rule</span>
+    <p><strong>Law of Sines:</strong> Use when you have a <strong>matching pair</strong> (a side AND the angle directly across from it). Cases: AAS, ASA, SSA.</p>
+    <p><strong>Law of Cosines:</strong> Use when you do <strong>NOT</strong> have a matching pair. Cases: SAS, SSS.</p>
+  </div>
+  <div class="analogy" role="note">
+    <span class="analogy-icon" aria-hidden="true">💡 Think of it this way:</span>
+    Law of Sines is a "matching" tool: needs a pair to start. Law of Cosines is "brute force": works without a pair. Fun fact: if C = 90&deg;, cos(90&deg;) = 0, and Law of Cosines becomes c&sup2; = a&sup2; + b&sup2;: just the Pythagorean theorem!
+  </div>
+
+  <div class="formula-box" role="note" aria-label="Law of sines, cosines, and area formulas">
+    <strong>Law of Sines:</strong> a/sin(A) = b/sin(B) = c/sin(C)<br><br>
+    <strong>Law of Cosines:</strong> c&sup2; = a&sup2; + b&sup2; &minus; 2ab cos(C)<br><br>
+    <strong>Area:</strong> Area = (1/2)ab sin(C) &nbsp; <span style="font-size:0.85em;color:var(--text2);">(C = angle BETWEEN sides a and b)</span>
+  </div>
+
+  <div class="inline-check" id="ic-l1" role="group" aria-labelledby="ic-l1-label">
+    <div class="ic-label" id="ic-l1-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-l1-q">You know two sides and the angle BETWEEN them (SAS). Which law?</p>
+    <button class="ic-btn" onclick="checkIC('ic-l1',this,false)" aria-describedby="ic-l1-q">Law of Sines</button>
+    <button class="ic-btn" onclick="checkIC('ic-l1',this,true)" aria-describedby="ic-l1-q">Law of Cosines</button>
+    <div class="ic-explain" hidden role="status">Correct! SAS = no matching pair &rarr; Law of Cosines.</div>
+  </div>
+
+  <div class="worked-series">
+    <div class="worked" aria-label="Worked example: Law of Sines basic">
+      <div class="ex-title">Law of Sines: A = 40&deg;, B = 60&deg;, a = 10. Find b.</div>
+      <div class="step">
+        <span class="step-label">Identify matching pairs</span>
+        Pair 1: side a = 10 with angle A = 40&deg;. Pair 2: side b (unknown) with angle B = 60&deg;.
+      </div>
+      <div class="step">
+        <span class="step-label">Set up Law of Sines</span>
+        <div class="step-math">a/sin(A) = b/sin(B) &rarr; 10/sin(40&deg;) = b/sin(60&deg;)</div>
+      </div>
+      <div class="step">
+        <span class="step-label">Solve for b (cross multiply)</span>
+        <div class="step-math">b = 10 &times; sin(60&deg;) / sin(40&deg;) = 10 &times; 0.866 / 0.643</div>
+      </div>
+      <div class="step final">
+        <span class="step-label">Answer</span>
+        b &asymp; <strong>13.47</strong>
+      </div>
+    </div>
+
+    <div class="worked" aria-label="Worked example: Law of Cosines basic">
+      <div class="ex-title">Law of Cosines: a = 7, b = 10, C = 50&deg;. Find c.</div>
+      <div class="step">
+        <span class="step-label">Identify the case</span>
+        We know two sides (a, b) and the angle BETWEEN them (C). This is SAS &rarr; Law of Cosines.
+      </div>
+      <div class="step">
+        <span class="step-label">Write the formula</span>
+        <div class="step-math">c&sup2; = a&sup2; + b&sup2; &minus; 2ab cos(C)</div>
+        <div class="step-math">c&sup2; = 7&sup2; + 10&sup2; &minus; 2(7)(10)cos(50&deg;)</div>
+      </div>
+      <div class="step">
+        <span class="step-label">Calculate</span>
+        <div class="step-math">c&sup2; = 49 + 100 &minus; 140(0.643) = 149 &minus; 90 = 59</div>
+      </div>
+      <div class="step final">
+        <span class="step-label">Answer</span>
+        c = &radic;59 &asymp; <strong>7.68</strong>
+      </div>
+    </div>
+
+    <div class="worked" aria-label="Worked example: Triangle area formula">
+      <div class="ex-title">Find the area of a triangle with sides a = 5, b = 8, and included angle C = 35&deg;</div>
+      <div class="step">
+        <span class="step-label">Formula</span>
+        <div class="step-math">Area = (1/2) &times; a &times; b &times; sin(C)</div>
+      </div>
+      <div class="step">
+        <span class="step-label">Plug in</span>
+        <div class="step-math">Area = (1/2) &times; 5 &times; 8 &times; sin(35&deg;) = 20 &times; 0.574</div>
+      </div>
+      <div class="step final">
+        <span class="step-label">Answer</span>
+        Area &asymp; <strong>11.47 square units</strong>
+        <span class="step-note">C must be the angle that sits BETWEEN sides a and b. Not just any angle.</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== VECTORS ===== -->
+<div class="tab-content" id="tab-vectors" role="tabpanel" aria-labelledby="btn-vectors" tabindex="0">
+<div class="card">
+  <h2>Vectors: Direction + Distance</h2>
+  <div class="gentle"><p>This is where trig shows up outside of pure math. If you have ever said "go 3 blocks east and 4 blocks north," you already used a vector.</p></div>
+
+  <div class="define" role="note" aria-label="Scalar and vector definitions">
+    <span class="define-label">New Words</span>
+    <p><strong>Scalar:</strong> A number with only size. "55 mph." No direction.</p>
+    <p><strong>Vector:</strong> A number with size AND direction. "55 mph north."</p>
+    <p><strong>Components:</strong> The horizontal (x) and vertical (y) pieces. Written &lt;x, y&gt;.</p>
+  </div>
+  <div class="analogy" role="note">
+    <span class="analogy-icon" aria-hidden="true">💡 Think of it this way:</span>
+    "Walk 5 blocks" = scalar. "Walk 3 east and 4 north" = vector. The 3 and 4 are components. Total: &radic;(9+16) = 5 blocks (Pythagorean theorem). Direction: tan&sup1;(4/3) &asymp; 53&deg; north of east (trig). Vectors = Pythagorean theorem + trig!
+  </div>
+
+  <div class="formula-box" role="note" aria-label="Vector formulas">
+    <strong>Magnitude:</strong> |v| = &radic;(x&sup2; + y&sup2;)<br>
+    <strong>Direction:</strong> &theta; = tan&sup1;(y/x) &nbsp; (check quadrant!)<br><br>
+    <strong>Components from magnitude + angle:</strong><br>
+    x = |v| cos(&theta;) &nbsp;&nbsp; y = |v| sin(&theta;)<br><br>
+    <strong>Dot product:</strong> u &middot; v = u&#8321;v&#8321; + u&#8322;v&#8322;<br>
+    Dot product = 0 &rarr; vectors are perpendicular.
+  </div>
+
+  <div class="worked-series">
+    <div class="worked" aria-label="Worked example: Find vector components">
+      <div class="ex-title">Plane flies 300 mph at 35&deg; north of east. Find x and y components.</div>
+      <div class="step"><span class="step-label">East (x) component uses cosine</span>
+        <div class="step-math">x = 300 cos(35&deg;) = 300 &times; 0.819 = 245.7 mph</div>
+      </div>
+      <div class="step"><span class="step-label">North (y) component uses sine</span>
+        <div class="step-math">y = 300 sin(35&deg;) = 300 &times; 0.574 = 172.1 mph</div>
+      </div>
+      <div class="step final"><span class="step-label">Verify magnitude</span>
+        <div class="step-math">&radic;(245.7&sup2; + 172.1&sup2;) = &radic;(60369 + 29618) = &radic;89987 &asymp; 300 &#10003;</div>
+      </div>
+    </div>
+
+    <div class="worked" aria-label="Worked example: Find magnitude and direction from components">
+      <div class="ex-title">A vector has components &lt;4, 3&gt;. Find its magnitude and direction angle.</div>
+      <div class="step"><span class="step-label">Magnitude</span>
+        <div class="step-math">|v| = &radic;(4&sup2; + 3&sup2;) = &radic;(16 + 9) = &radic;25 = 5</div>
+      </div>
+      <div class="step"><span class="step-label">Direction angle</span>
+        <div class="step-math">&theta; = tan&sup1;(3/4) = tan&sup1;(0.75) &asymp; 36.87&deg;</div>
+        Both components positive &rarr; QI. No quadrant adjustment needed.
+      </div>
+      <div class="step final"><span class="step-label">Answer</span>
+        Magnitude = <strong>5</strong>, direction = <strong>36.87&deg;</strong> above the positive x-axis.
+      </div>
+    </div>
+
+    <div class="worked" aria-label="Worked example: Dot product and perpendicularity">
+      <div class="ex-title">Are vectors u = &lt;3, 4&gt; and v = &lt;4, &minus;3&gt; perpendicular?</div>
+      <div class="step"><span class="step-label">Compute the dot product</span>
+        <div class="step-math">u &middot; v = (3)(4) + (4)(&minus;3) = 12 &minus; 12 = 0</div>
+      </div>
+      <div class="step final"><span class="step-label">Conclusion</span>
+        Dot product = 0 &rarr; <strong>Yes, the vectors are perpendicular.</strong>
+        <span class="step-note">This is the fastest way to check perpendicularity. No angles needed.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="inline-check" id="ic-v1" role="group" aria-labelledby="ic-v1-label">
+    <div class="ic-label" id="ic-v1-label"><span class="ic-check-icon" aria-hidden="true">&#10003;</span> Quick Check</div>
+    <p class="ic-q" id="ic-v1-q">Vector: magnitude 50, angle 60&deg;. The x-component is:</p>
+    <button class="ic-btn" onclick="checkIC('ic-v1',this,true)" aria-describedby="ic-v1-q">25</button>
+    <button class="ic-btn" onclick="checkIC('ic-v1',this,false)" aria-describedby="ic-v1-q">43.3</button>
+    <button class="ic-btn" onclick="checkIC('ic-v1',this,false)" aria-describedby="ic-v1-q">50</button>
+    <div class="ic-explain" hidden role="status">Yes! x always uses cosine. x = |v|cos(&theta;) = 50 &times; cos(60&deg;) = 50 &times; 0.5 = 25. (y = 50sin(60&deg;) = 43.3)</div>
+  </div>
+</div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div class="tab-content" id="tab-quiz" role="tabpanel" aria-labelledby="btn-quiz" tabindex="0">
+<div class="card">
+  <h2>Practice Quiz</h2>
+  <p style="color:var(--text2);font-style:italic;margin-bottom:1rem;">No pressure. Read the explanation after each question. Start with "Easy" if you are just beginning.</p>
+  <div class="quiz-controls" role="group" aria-label="Filter quiz questions">
+    <button class="quiz-btn" aria-pressed="true" onclick="filterQuiz('all',this)">All</button>
+    <button class="quiz-btn" aria-pressed="false" onclick="filterQuiz('easy',this)">Easy</button>
+    <button class="quiz-btn" aria-pressed="false" onclick="filterQuiz('medium',this)">Medium</button>
+    <button class="quiz-btn" aria-pressed="false" onclick="filterQuiz('hard',this)">Hard</button>
+    <button class="quiz-btn" onclick="shuffleQuiz()">Shuffle</button>
+    <button class="quiz-btn" onclick="resetQuiz()">Reset</button>
+  </div>
+  <div class="score-bar" id="score-bar" aria-live="polite" aria-atomic="true">Score: 0 / 0</div>
+  <div id="quiz-container" aria-label="Quiz questions"></div>
+</div>
+</div>
+
+<!-- ===== FLASHCARDS ===== -->
+<div class="tab-content" id="tab-flashcards" role="tabpanel" aria-labelledby="btn-flashcards" tabindex="0">
+<div class="card">
+  <h2>Flashcards</h2>
+  <p style="color:var(--text2);font-style:italic;margin-bottom:1rem;">Click the card or press Enter/Space to flip. Use arrow buttons or keyboard to browse.</p>
+  <div class="flashcard-container" aria-live="polite">
+    <div class="flashcard" id="flashcard" onclick="flipCard()" role="button" tabindex="0" aria-label="Flashcard. Press Enter or Space to flip." onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();flipCard();}">
+      <div class="fc-front" id="fc-front" aria-hidden="false"></div>
+      <div class="fc-back" id="fc-back" aria-hidden="true"></div>
+    </div>
+  </div>
+  <div class="fc-nav" role="group" aria-label="Flashcard navigation">
+    <button onclick="prevCard()" aria-label="Previous flashcard">&#9664; Prev</button>
+    <span class="fc-status" id="fc-counter" aria-live="polite" aria-atomic="true">1/20</span>
+    <button onclick="nextCard()" aria-label="Next flashcard">Next &#9654;</button>
+    <button onclick="shuffleCards()">Shuffle</button>
+  </div>
+  <div id="fc-screenreader" class="canvas-live" aria-live="polite" aria-atomic="true"></div>
+</div>
+</div>
+
+<!-- ===== SHORT ANSWER ===== -->
+<div class="tab-content" id="tab-short-answer" role="tabpanel" aria-labelledby="btn-short-answer" tabindex="0">
+<div class="card">
+  <h2>Short Answer</h2>
+  <p style="color:var(--text2);font-style:italic;margin-bottom:1.5rem;">Write in your own words. The grader checks for key ideas, not exact wording.</p>
+  <div id="sa-container"></div>
+</div>
+</div>
+
+</div><!-- end .container -->
+<footer class="site-footer" role="contentinfo">
+  <p>Trig Visual Lab &mdash; Free interactive study guide for all learners.</p>
+  <p style="margin-top:0.4rem;font-size:0.8rem;">All interactive elements are keyboard accessible. Use Tab to navigate, Enter or Space to activate buttons, and arrow keys for sliders.</p>
+</footer>
+
+<script>
+// ============ TABS ============
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => { t.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(b => { b.setAttribute('aria-selected','false'); });
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.setAttribute('aria-selected','true');
+  if (id === 'triangle') updateTriangle();
+  if (id === 'unit-circle') drawUnitCircle(0);
+  if (id === 'graphs') updateGraph();
+  // Scroll to top of tab content
+  document.getElementById('tab-' + id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Keyboard navigation for tabs
+document.querySelectorAll('.tab-btn').forEach((btn, i, all) => {
+  btn.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight') { e.preventDefault(); all[(i + 1) % all.length].focus(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); all[(i - 1 + all.length) % all.length].focus(); }
+  });
+});
+
+// ============ INLINE CHECKS ============
+function checkIC(id, btn, correct) {
+  const c = document.getElementById(id);
+  const btns = c.querySelectorAll('.ic-btn');
+  const exp = c.querySelector('.ic-explain');
+  if ([...btns].some(b => b.classList.contains('ic-correct'))) return;
+  btns.forEach(b => { b.disabled = true; b.setAttribute('aria-disabled','true'); });
+  if (correct) {
+    btn.classList.add('ic-correct');
+    btn.setAttribute('aria-label', btn.textContent + ' - Correct!');
+  } else {
+    btn.classList.add('ic-wrong');
+    btn.setAttribute('aria-label', btn.textContent + ' - Incorrect');
+    btns.forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(',true)')) {
+        b.classList.add('ic-correct');
+        b.setAttribute('aria-label', b.textContent + ' - This was the correct answer');
+      }
+    });
+  }
+  exp.hidden = false;
+  exp.focus();
+}
+
+// ============ RIGHT TRIANGLE ============
+function updateTriangle() {
+  const angle = +document.getElementById('tri-angle').value;
+  const hyp = +document.getElementById('tri-hyp').value;
+  const rad = angle * Math.PI / 180;
+  const opp = hyp * Math.sin(rad), adj = hyp * Math.cos(rad);
+  document.getElementById('tri-angle-val').textContent = angle + '°';
+  document.getElementById('tri-hyp-val').textContent = hyp;
+  document.getElementById('tri-angle').setAttribute('aria-valuenow', angle);
+  document.getElementById('tri-hyp').setAttribute('aria-valuenow', hyp);
+  const sinV = Math.sin(rad).toFixed(3), cosV = Math.cos(rad).toFixed(3);
+  const tanV = angle >= 89 ? 'Undef' : Math.tan(rad).toFixed(3);
+  document.getElementById('r-sin').textContent = sinV;
+  document.getElementById('r-cos').textContent = cosV;
+  document.getElementById('r-tan').textContent = tanV;
+  document.getElementById('r-opp').textContent = opp.toFixed(2);
+  document.getElementById('r-adj').textContent = adj.toFixed(2);
+  document.getElementById('r-hyp2').textContent = hyp;
+  // Screen reader live update
+  document.getElementById('tri-canvas-live').textContent =
+    `Triangle: angle ${angle} degrees, hypotenuse ${hyp}. Opposite side: ${opp.toFixed(2)}, adjacent side: ${adj.toFixed(2)}. Sin: ${sinV}, Cos: ${cosV}, Tan: ${tanV}.`;
+
+  const c = document.getElementById('tri-canvas'), ctx = c.getContext('2d'), W = c.width, H = c.height;
+  ctx.clearRect(0, 0, W, H);
+  const margin = 60, scale = Math.min((W - 2 * margin) / hyp, (H - 2 * margin) / hyp) * 0.8;
+  const bx = margin, by = H - margin, ax = bx + adj * scale, ay = by, cx2 = bx + adj * scale, cy2 = by - opp * scale;
+  ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(ax, ay); ctx.lineTo(cx2, cy2); ctx.closePath();
+  ctx.fillStyle = 'rgba(196,136,11,0.06)'; ctx.fill();
+  ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(ax, ay); ctx.strokeStyle = '#2980B9'; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(cx2, cy2); ctx.strokeStyle = '#C0392B'; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(cx2, cy2); ctx.strokeStyle = '#2C2416'; ctx.stroke();
+  const sq = 12; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(ax - sq, ay); ctx.lineTo(ax - sq, ay - sq); ctx.lineTo(ax, ay - sq); ctx.strokeStyle = '#666'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(bx, by, 30, 0, -rad, true); ctx.strokeStyle = '#C4880B'; ctx.lineWidth = 2; ctx.stroke();
+  ctx.font = 'bold 14px "Source Sans 3", sans-serif';
+  ctx.fillStyle = '#2980B9'; ctx.fillText('Adjacent = ' + adj.toFixed(1), (bx + ax) / 2 - 30, by + 25);
+  ctx.fillStyle = '#C0392B'; ctx.save(); ctx.translate(ax + 18, (ay + cy2) / 2); ctx.rotate(-Math.PI / 2); ctx.fillText('Opposite = ' + opp.toFixed(1), -(opp * scale) / 4, 0); ctx.restore();
+  ctx.fillStyle = '#2C2416'; ctx.fillText('Hyp = ' + hyp, (bx + cx2) / 2 - 50, (by + cy2) / 2);
+  ctx.fillStyle = '#8A5F08'; ctx.font = 'bold 13px "Source Sans 3", sans-serif'; ctx.fillText('θ = ' + angle + '°', bx + 36, by - 10);
+}
+
+// ============ UNIT CIRCLE ============
+let ucAngle = 0, ucDragging = false;
+function initUC() {
+  const c = document.getElementById('uc-canvas');
+  c.addEventListener('mousedown', e => { ucDragging = true; ucMouse(e); });
+  c.addEventListener('mousemove', e => { if (ucDragging) ucMouse(e); });
+  c.addEventListener('mouseup', () => ucDragging = false);
+  c.addEventListener('mouseleave', () => ucDragging = false);
+  c.addEventListener('touchstart', e => { e.preventDefault(); ucDragging = true; ucTouch(e); }, { passive: false });
+  c.addEventListener('touchmove', e => { e.preventDefault(); if (ucDragging) ucTouch(e); }, { passive: false });
+  c.addEventListener('touchend', () => ucDragging = false);
+  c.addEventListener('click', e => ucMouse(e));
+  // Keyboard support for unit circle
+  c.setAttribute('tabindex','0');
+  c.addEventListener('keydown', e => {
+    let step = 5 * Math.PI / 180;
+    if (e.key === 'ArrowRight') { e.preventDefault(); ucAngle = (ucAngle - step + 2 * Math.PI) % (2 * Math.PI); drawUnitCircle(ucAngle); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); ucAngle = (ucAngle + step + 2 * Math.PI) % (2 * Math.PI); drawUnitCircle(ucAngle); }
+  });
+  drawUnitCircle(0);
+}
+function ucMouse(e) {
+  const c = document.getElementById('uc-canvas'), r = c.getBoundingClientRect();
+  let a = Math.atan2(-(e.clientY - r.top - c.height / 2), e.clientX - r.left - c.width / 2);
+  if (a < 0) a += 2 * Math.PI;
+  ucAngle = a; drawUnitCircle(a);
+}
+function ucTouch(e) {
+  const t = e.touches[0], c = document.getElementById('uc-canvas'), r = c.getBoundingClientRect();
+  let a = Math.atan2(-(t.clientY - r.top - c.height / 2), t.clientX - r.left - c.width / 2);
+  if (a < 0) a += 2 * Math.PI;
+  ucAngle = a; drawUnitCircle(a);
+}
+function drawUnitCircle(a) {
+  const c = document.getElementById('uc-canvas'), ctx = c.getContext('2d'), W = c.width, H = c.height, cx = W / 2, cy = H / 2, R = 190;
+  ctx.clearRect(0, 0, W, H);
+  ctx.strokeStyle = '#E8DFD2'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(W, cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, H); ctx.stroke();
+  ctx.font = 'bold 12px "Source Sans 3", sans-serif'; ctx.fillStyle = 'rgba(196,136,11,0.25)';
+  ctx.fillText('QI', cx + R / 2 - 10, cy - R / 2); ctx.fillText('QII', cx - R / 2 - 15, cy - R / 2);
+  ctx.fillText('QIII', cx - R / 2 - 18, cy + R / 2 + 15); ctx.fillText('QIV', cx + R / 2 - 10, cy + R / 2 + 15);
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2 * Math.PI); ctx.strokeStyle = '#2C2416'; ctx.lineWidth = 2; ctx.stroke();
+  [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330].forEach(d => {
+    const r2 = d * Math.PI / 180;
+    ctx.beginPath(); ctx.arc(cx + R * Math.cos(r2), cy - R * Math.sin(r2), 3, 0, 2 * Math.PI);
+    ctx.fillStyle = '#999'; ctx.fill();
+  });
+  const px = cx + R * Math.cos(a), py = cy - R * Math.sin(a);
+  ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(px, cy); ctx.strokeStyle = '#2980B9'; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(px, cy); ctx.lineTo(px, py); ctx.strokeStyle = '#C0392B'; ctx.stroke();
+  ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(px, py); ctx.strokeStyle = '#2C2416'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx, cy, 35, 0, -a, true); ctx.strokeStyle = '#C4880B'; ctx.lineWidth = 2; ctx.stroke();
+  ctx.beginPath(); ctx.arc(px, py, 7, 0, 2 * Math.PI); ctx.fillStyle = '#C4880B'; ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+  ctx.font = 'bold 13px "Source Sans 3", sans-serif';
+  ctx.fillStyle = '#2980B9'; ctx.fillText('cos θ', (cx + px) / 2 - 15, cy + 18);
+  ctx.fillStyle = '#C0392B'; ctx.fillText('sin θ', px + 8, (cy + py) / 2 + 4);
+  ctx.font = '12px "Source Sans 3", sans-serif'; ctx.fillStyle = '#888';
+  ctx.fillText('0°', cx + R + 8, cy + 4); ctx.fillText('90°', cx - 8, cy - R - 8); ctx.fillText('180°', cx - R - 35, cy + 4); ctx.fillText('270°', cx - 10, cy + R + 18);
+  const deg = a * 180 / Math.PI, cosV = Math.cos(a), sinV = Math.sin(a);
+  document.getElementById('uc-deg').textContent = Math.round(deg) + '°';
+  const frac = a / Math.PI;
+  let radStr;
+  if (Math.abs(frac) < 0.01) radStr = '0';
+  else if (Math.abs(frac - 1) < 0.05) radStr = 'π';
+  else if (Math.abs(frac - 2) < 0.05) radStr = '2π';
+  else radStr = frac.toFixed(2) + 'π';
+  document.getElementById('uc-rad').textContent = radStr;
+  document.getElementById('uc-cos').textContent = cosV.toFixed(3);
+  document.getElementById('uc-sin').textContent = sinV.toFixed(3);
+  document.getElementById('uc-tan').textContent = Math.abs(cosV) < 0.001 ? 'Undef' : (sinV / cosV).toFixed(3);
+  let q;
+  if (deg < 1 || deg > 359) q = 'Right (0°)';
+  else if (deg < 90) q = 'QI'; else if (deg < 91) q = 'Top (90°)';
+  else if (deg < 180) q = 'QII'; else if (deg < 181) q = 'Left (180°)';
+  else if (deg < 270) q = 'QIII'; else if (deg < 271) q = 'Bottom (270°)';
+  else q = 'QIV';
+  document.getElementById('uc-quad').textContent = q;
+  // Screen reader update
+  document.getElementById('uc-canvas-live').textContent =
+    `Angle: ${Math.round(deg)} degrees (${radStr} radians). Cosine: ${cosV.toFixed(3)}, Sine: ${sinV.toFixed(3)}. Quadrant: ${q}.`;
+}
+
+// ============ GRAPH ============
+let graphFunc = 'sin';
+function setFunc(f) {
+  graphFunc = f;
+  ['sin','cos','tan'].forEach(fn => {
+    const btn = document.getElementById('btn-' + fn);
+    btn.classList.toggle('active', fn === f);
+    btn.setAttribute('aria-pressed', fn === f ? 'true' : 'false');
+  });
+  updateGraph();
+}
+function updateGraph() {
+  const A = +document.getElementById('gA').value, B = +document.getElementById('gB').value,
+        C = +document.getElementById('gC').value, D = +document.getElementById('gD').value;
+  document.getElementById('gA-val').textContent = A;
+  document.getElementById('gB-val').textContent = B;
+  document.getElementById('gC-val').textContent = C.toFixed(1);
+  document.getElementById('gD-val').textContent = D;
+  document.getElementById('gA').setAttribute('aria-valuenow', A);
+  document.getElementById('gB').setAttribute('aria-valuenow', B);
+  document.getElementById('gC').setAttribute('aria-valuenow', C);
+  document.getElementById('gD').setAttribute('aria-valuenow', D);
+  const period = 2 * Math.PI / Math.abs(B), phase = -C / B;
+  document.getElementById('g-amp').textContent = Math.abs(A).toFixed(1);
+  document.getElementById('g-period').textContent = period.toFixed(2);
+  document.getElementById('g-phase').textContent = phase.toFixed(2);
+  document.getElementById('g-mid').textContent = 'y = ' + D;
+  document.getElementById('graph-canvas-live').textContent =
+    `Graph: y = ${A} ${graphFunc}(${B}x + ${C.toFixed(1)}) + ${D}. Amplitude: ${Math.abs(A).toFixed(1)}, Period: ${period.toFixed(2)}, Phase shift: ${phase.toFixed(2)}, Midline: y = ${D}.`;
+
+  const c = document.getElementById('graph-canvas'), ctx = c.getContext('2d'), W = c.width, H = c.height;
+  ctx.clearRect(0, 0, W, H);
+  const mx = 50, my = 30, gW = W - 2 * mx, gH = H - 2 * my, xMin = -2 * Math.PI, xMax = 4 * Math.PI, yMin = -5, yMax = 5;
+  function toX(v) { return mx + (v - xMin) / (xMax - xMin) * gW; }
+  function toY(v) { return my + (yMax - v) / (yMax - yMin) * gH; }
+  ctx.strokeStyle = '#E8DFD2'; ctx.lineWidth = 1;
+  for (let y = -4; y <= 4; y++) { ctx.beginPath(); ctx.moveTo(mx, toY(y)); ctx.lineTo(mx + gW, toY(y)); ctx.stroke(); }
+  for (let x = -2; x <= 4; x++) { const xv = x * Math.PI; ctx.beginPath(); ctx.moveTo(toX(xv), my); ctx.lineTo(toX(xv), my + gH); ctx.stroke(); }
+  ctx.strokeStyle = '#999'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(mx, toY(0)); ctx.lineTo(mx + gW, toY(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(toX(0), my); ctx.lineTo(toX(0), my + gH); ctx.stroke();
+  if (D !== 0) { ctx.setLineDash([5, 5]); ctx.strokeStyle = '#C4880B'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(mx, toY(D)); ctx.lineTo(mx + gW, toY(D)); ctx.stroke(); ctx.setLineDash([]); }
+  ctx.font = '11px "JetBrains Mono", monospace'; ctx.fillStyle = '#888';
+  for (let x = -2; x <= 4; x++) {
+    const l = x === 0 ? '0' : x === 1 ? 'π' : x === -1 ? '-π' : x + 'π';
+    ctx.fillText(l, toX(x * Math.PI) - 10, toY(0) + 15);
+  }
+  for (let y = -4; y <= 4; y++) { if (y !== 0) ctx.fillText(y + '', toX(0) - 25, toY(y) + 4); }
+  const fn = graphFunc === 'sin' ? Math.sin : graphFunc === 'cos' ? Math.cos : Math.tan;
+  ctx.beginPath(); let started = false;
+  for (let px = 0; px <= gW; px++) {
+    const xv = xMin + px / gW * (xMax - xMin);
+    let yv = A * fn(B * xv + C) + D;
+    if (graphFunc === 'tan' && Math.abs(yv) > 10) { started = false; continue; }
+    const sy = toY(yv);
+    if (!started) { ctx.moveTo(mx + px, sy); started = true; } else ctx.lineTo(mx + px, sy);
+  }
+  ctx.strokeStyle = '#C4880B'; ctx.lineWidth = 3; ctx.stroke();
+}
+
+// ============ QUIZ ============
+const quizData = [
+  {diff:"easy",q:"What does SOH-CAH-TOA help you remember?",choices:["The Pythagorean theorem","How sine, cosine, and tangent relate to triangle sides","The unit circle coordinates","How to convert degrees to radians"],answer:1,explain:"SOH = Sine is Opposite/Hypotenuse. CAH = Cosine is Adjacent/Hypotenuse. TOA = Tangent is Opposite/Adjacent."},
+  {diff:"easy",q:"What is sin(90°)?",choices:["0","1/2","√2/2","1"],answer:3,explain:"On the unit circle, 90° = top = (0,1). Sine = y-coordinate = 1."},
+  {diff:"easy",q:"Convert 180° to radians.",choices:["π/2","π","2π","3π/2"],answer:1,explain:"180° × (π/180) = π. The π and 180 cancel, leaving just π."},
+  {diff:"easy",q:"Which side is the hypotenuse?",choices:["The shortest side","The one next to θ","The longest side, across from 90°","Any side"],answer:2,explain:"Hypotenuse = longest side, always across from the right angle."},
+  {diff:"easy",q:"What is cos(0°)?",choices:["0","1","−1","1/2"],answer:1,explain:"At 0° on the unit circle: point (1,0). Cos = x = 1."},
+  {diff:"easy",q:"tan(45°) = ?",choices:["0","1","√2","Undefined"],answer:1,explain:"At 45°, opp = adj, so tan = opp/adj = 1. Equal legs divide to 1."},
+  {diff:"easy",q:"The reciprocal of sine is:",choices:["Cosine","Secant","Cosecant","Cotangent"],answer:2,explain:"csc = 1/sin. Cosecant pairs with sine (names cross!)."},
+  {diff:"easy",q:"How many radians in a full circle?",choices:["π","2π","π/2","4π"],answer:1,explain:"360° = 2π radians ≈ 6.28."},
+  {diff:"medium",q:"sin²(x) + cos²(x) = ?",choices:["0","1","2","Depends on x"],answer:1,explain:"The Pythagorean identity. Always 1, for every x, forever."},
+  {diff:"medium",q:"Period of y = sin(2x)?",choices:["π/2","π","2π","4π"],answer:1,explain:"Period = 2π/|B| = 2π/2 = π."},
+  {diff:"medium",q:"Both sin and cos are negative in:",choices:["QI","QII","QIII","QIV"],answer:2,explain:"QIII (180°-270°). Only tangent is positive there (ASTC: 'Take')."},
+  {diff:"medium",q:"Reference angle for 225°?",choices:["25°","45°","55°","135°"],answer:1,explain:"QIII: 225° − 180° = 45°."},
+  {diff:"medium",q:"Amplitude of y = 3sin(x)?",choices:["1","3","6","π"],answer:1,explain:"Amplitude = |A| = |3| = 3."},
+  {diff:"medium",q:"sin⁻¹(x) means:",choices:["1/sin(x)","The angle whose sine is x","sin(1/x)","sin(x⁻¹)"],answer:1,explain:"sin⁻¹ (arcsin) = the ANGLE whose sine is x. NOT 1/sin(x) (that is csc)."},
+  {diff:"medium",q:"When to use Law of Cosines?",choices:["AAS","ASA","SAS or SSS","SSA"],answer:2,explain:"No matching pair needed. SAS or SSS → Law of Cosines."},
+  {diff:"medium",q:"sin(2θ) = ?",choices:["2sin(θ)","2sin(θ)cos(θ)","sin²(θ)","sin(θ)+cos(θ)"],answer:1,explain:"Double-angle: sin(2θ) = 2sin(θ)cos(θ)."},
+  {diff:"hard",q:"Simplify: (1 − cos²x) / sin(x)",choices:["cos(x)","sin(x)","tan(x)","csc(x)"],answer:1,explain:"1−cos²x = sin²x. So sin²x/sinx = sinx."},
+  {diff:"hard",q:"If sinθ = 3/5 (QI), cos(2θ) = ?",choices:["7/25","−7/25","24/25","−24/25"],answer:0,explain:"cos(2θ) = 1−2sin²θ = 1−2(9/25) = 1−18/25 = 7/25."},
+  {diff:"hard",q:"cos(A+B) = ?",choices:["cosAcosB + sinAsinB","cosAcosB − sinAsinB","sinAcosB + cosAsinB","sinAcosB − cosAsinB"],answer:1,explain:"cos(A+B) = cosAcosB − sinAsinB. Sum uses minus!"},
+  {diff:"hard",q:"Solve 2sin(x)−1=0 on [0,2π). How many solutions?",choices:["1","2","3","4"],answer:1,explain:"sinx=1/2. Positive in QI,QII: x=π/6 and 5π/6. Two solutions."},
+  {diff:"hard",q:"Dot product of perpendicular vectors?",choices:["1","−1","0","Their magnitudes"],answer:2,explain:"u·v = |u||v|cos(90°) = 0."},
+  {diff:"hard",q:"x=4cosθ, y=4sinθ. Rectangular form?",choices:["y=4x","x+y=16","x²+y²=16","x²−y²=16"],answer:2,explain:"(x/4)²+(y/4)²=1 → x²+y²=16. Circle radius 4."},
+  {diff:"hard",q:"Which is cos(2x)?",choices:["2cosx−1","2cos²x−1","cos²x+sin²x","2sinxcosx"],answer:1,explain:"cos(2x) = 2cos²x−1. (cos²x+sin²x=1 is Pythagorean, not cos(2x).)"},
+];
+
+const flashcards = [
+  {front:"SOH-CAH-TOA",back:"Sine = Opposite / Hypotenuse\nCosine = Adjacent / Hypotenuse\nTangent = Opposite / Adjacent"},
+  {front:"The Pythagorean Identity",back:"sin²θ + cos²θ = 1\n\nAlways true. Every angle."},
+  {front:"sin(30°)",back:"1/2 = 0.5\n\nFrom the 30-60-90 triangle"},
+  {front:"cos(45°)",back:"√2/2 ≈ 0.707\n\nFrom the 45-45-90 triangle"},
+  {front:"tan(60°)",back:"√3 ≈ 1.732"},
+  {front:"Degrees → Radians",back:"Multiply by π/180\n\nExample: 90° × π/180 = π/2"},
+  {front:"Radians → Degrees",back:"Multiply by 180/π\n\nExample: π/3 × 180/π = 60°"},
+  {front:"30-60-90 sides",back:"1 : √3 : 2\n\n1 across from 30°, √3 from 60°, 2 = hypotenuse"},
+  {front:"45-45-90 sides",back:"1 : 1 : √2\n\nEqual legs, hyp = leg × √2"},
+  {front:"All Students Take Calculus",back:"QI: ALL positive\nQII: SINE positive\nQIII: TANGENT positive\nQIV: COSINE positive"},
+  {front:"Period formula",back:"Period = 2π / |B|\n\nBigger B = shorter period"},
+  {front:"Amplitude",back:"|A| = amplitude\n\nHeight from midline to peak"},
+  {front:"sin⁻¹(x) vs 1/sin(x)",back:"sin⁻¹(x) = arcsin = the ANGLE\n\n1/sin(x) = csc(x) = cosecant\n\nCompletely different!"},
+  {front:"Law of Sines",back:"a/sinA = b/sinB = c/sinC\n\nUse for: AAS, ASA, SSA"},
+  {front:"Law of Cosines",back:"c² = a² + b² − 2ab cos(C)\n\nUse for: SAS or SSS"},
+  {front:"sin(2θ)",back:"2 sinθ cosθ"},
+  {front:"cos(2θ) — three forms",back:"cos²θ − sin²θ\n= 2cos²θ − 1\n= 1 − 2sin²θ"},
+  {front:"Area of any triangle",back:"Area = (1/2) ab sin(C)\n\nC = angle BETWEEN sides a and b"},
+  {front:"Vector components",back:"x = |v| cosθ\ny = |v| sinθ\n\nmagnitude = √(x² + y²)"},
+  {front:"Dot product = 0 means...",back:"The two vectors are perpendicular (meet at 90°)"},
+];
+
+const saData = [
+  {q:"In your own words, explain what sine, cosine, and tangent measure. Use the words 'opposite,' 'adjacent,' and 'hypotenuse.'",
+   keywords:["opposite","adjacent","hypotenuse","ratio","sine","cosine","tangent","divided","over","fraction"],
+   explain:"Sine = opposite/hypotenuse. Cosine = adjacent/hypotenuse. Tangent = opposite/adjacent. They are just fractions comparing two sides of a right triangle."},
+  {q:"Explain the difference between sin⁻¹(x) and 1/sin(x). Why is the notation confusing?",
+   keywords:["inverse","angle","reciprocal","cosecant","arcsin","notation","-1","returns","different"],
+   explain:"sin⁻¹(x) (arcsin) returns the angle whose sine is x. 1/sin(x) is the reciprocal, called cosecant. The confusion: in algebra, x⁻¹ means 1/x, but for trig, ⁻¹ means 'inverse function.'"},
+  {q:"What does 'All Students Take Calculus' help you remember? Give an example.",
+   keywords:["quadrant","positive","negative","sign","all","sine","tangent","cosine","QI","QII","QIII","QIV"],
+   explain:"Which trig functions are positive in each quadrant: QI=All, QII=Sine, QIII=Tangent, QIV=Cosine. Example: sin(150°) is in QII, so sine is positive: sin(150°) = +sin(30°) = +1/2."},
+  {q:"A friend says sin(30°+60°) = sin(30°)+sin(60°). Explain why this is wrong.",
+   keywords:["wrong","not equal","sum formula","sin(90)","1","cannot","add","distribute"],
+   explain:"sin(30°+60°) = sin(90°) = 1. But sin(30°)+sin(60°) = 0.5+0.866 = 1.366. Not equal! You cannot distribute sine over addition. Must use the sum formula."},
+  {q:"When do you use Law of Sines vs Law of Cosines? How do you decide?",
+   keywords:["law of sines","law of cosines","pair","match","SAS","SSS","AAS","ASA","opposite","between"],
+   explain:"Law of Sines: when you have a matched pair (side + opposite angle). AAS, ASA, SSA. Law of Cosines: when you do NOT have a matched pair. SAS or SSS."},
+];
+
+// Quiz engine
+let currentFilter = 'all', score = 0, answered = 0;
+function filterQuiz(lv, btn) {
+  currentFilter = lv;
+  document.querySelectorAll('#tab-quiz .quiz-btn').forEach(b => b.setAttribute('aria-pressed','false'));
+  if (btn) btn.setAttribute('aria-pressed','true');
+  renderQuiz();
+}
+function shuffleQuiz() { quizData.sort(() => Math.random() - 0.5); renderQuiz(); }
+function resetQuiz() { score = 0; answered = 0; renderQuiz(); }
+function renderQuiz() {
+  const c = document.getElementById('quiz-container');
+  const f = currentFilter === 'all' ? quizData : quizData.filter(q => q.diff === currentFilter);
+  c.innerHTML = f.map((q, i) =>
+    `<div class="quiz-question" id="qq-${i}" role="group" aria-labelledby="qq-label-${i}">
+      <div class="q-diff" aria-label="Difficulty: ${q.diff}">${q.diff.toUpperCase()}</div>
+      <div class="q-text" id="qq-label-${i}">${q.q}</div>
+      <div role="radiogroup" aria-labelledby="qq-label-${i}">
+        ${q.choices.map((ch, ci) =>
+          `<button class="choice-btn" onclick="checkA(${i},${ci})" aria-describedby="qq-label-${i}">${ch}</button>`
+        ).join('')}
+      </div>
+      <div class="explanation" id="exp-${i}" hidden role="status">${q.explain}</div>
+    </div>`
+  ).join('');
+  score = 0; answered = 0; updateScore();
+}
+function checkA(qi, ci) {
+  const f = currentFilter === 'all' ? quizData : quizData.filter(q => q.diff === currentFilter);
+  const q = f[qi], el = document.getElementById('qq-' + qi), btns = el.querySelectorAll('.choice-btn');
+  if ([...btns].some(b => b.classList.contains('correct') || b.classList.contains('wrong'))) return;
+  btns.forEach(b => { b.disabled = true; });
+  answered++;
+  if (ci === q.answer) {
+    btns[ci].classList.add('correct');
+    btns[ci].setAttribute('aria-label', btns[ci].textContent + ' — Correct!');
+    score++;
+  } else {
+    btns[ci].classList.add('wrong');
+    btns[ci].setAttribute('aria-label', btns[ci].textContent + ' — Incorrect');
+    btns[q.answer].classList.add('correct');
+    btns[q.answer].setAttribute('aria-label', btns[q.answer].textContent + ' — This was the correct answer');
+  }
+  const exp = document.getElementById('exp-' + qi);
+  exp.hidden = false;
+  updateScore();
+}
+function updateScore() {
+  document.getElementById('score-bar').textContent = 'Score: ' + score + ' / ' + answered;
+}
+
+// Flashcards
+let fcI = 0, fcFlipped = false;
+function renderCard() {
+  const card = document.getElementById('flashcard');
+  card.classList.remove('flipped');
+  fcFlipped = false;
+  const front = document.getElementById('fc-front'), back = document.getElementById('fc-back');
+  front.innerHTML = flashcards[fcI].front.replace(/\n/g, '<br>');
+  back.innerHTML = flashcards[fcI].back.replace(/\n/g, '<br>');
+  front.setAttribute('aria-hidden', 'false');
+  back.setAttribute('aria-hidden', 'true');
+  document.getElementById('fc-counter').textContent = (fcI + 1) + '/' + flashcards.length;
+  card.setAttribute('aria-label', 'Flashcard ' + (fcI + 1) + ' of ' + flashcards.length + '. Front: ' + flashcards[fcI].front + '. Press Enter or Space to flip.');
+  document.getElementById('fc-screenreader').textContent = 'Card ' + (fcI+1) + ': ' + flashcards[fcI].front;
+}
+function flipCard() {
+  const card = document.getElementById('flashcard');
+  fcFlipped = !fcFlipped;
+  card.classList.toggle('flipped');
+  document.getElementById('fc-front').setAttribute('aria-hidden', fcFlipped ? 'true' : 'false');
+  document.getElementById('fc-back').setAttribute('aria-hidden', fcFlipped ? 'false' : 'true');
+  document.getElementById('fc-screenreader').textContent = fcFlipped ?
+    'Back: ' + flashcards[fcI].back.replace(/\n/g, '. ') :
+    'Front: ' + flashcards[fcI].front;
+}
+function nextCard() { fcI = (fcI + 1) % flashcards.length; renderCard(); }
+function prevCard() { fcI = (fcI - 1 + flashcards.length) % flashcards.length; renderCard(); }
+function shuffleCards() { flashcards.sort(() => Math.random() - 0.5); fcI = 0; renderCard(); }
+
+// Keyboard navigation for flashcards
+document.addEventListener('keydown', function(e) {
+  if (document.getElementById('tab-flashcards').classList.contains('active')) {
+    if (e.key === 'ArrowRight') nextCard();
+    if (e.key === 'ArrowLeft') prevCard();
+  }
+});
+
+// Short answer
+function renderSA() {
+  document.getElementById('sa-container').innerHTML = saData.map((q, i) =>
+    `<div class="sa-question" role="group" aria-labelledby="sa-q-label-${i}">
+      <p class="q-text" id="sa-q-label-${i}">${q.q}</p>
+      <label for="sa-${i}" class="canvas-live">Your answer for question ${i+1}</label>
+      <textarea class="sa-input" id="sa-${i}" placeholder="Write your answer here in your own words..." aria-labelledby="sa-q-label-${i}"></textarea>
+      <button class="sa-check-btn" onclick="checkSA(${i})">Check My Answer</button>
+      <div class="sa-feedback" id="sf-${i}" hidden role="status" aria-live="polite"></div>
+    </div>`
+  ).join('');
+}
+function checkSA(i) {
+  const v = document.getElementById('sa-' + i).value.toLowerCase();
+  const fb = document.getElementById('sf-' + i), q = saData[i];
+  if (!v.trim()) {
+    fb.hidden = false; fb.className = 'sa-feedback needs-work';
+    fb.innerHTML = 'Give it a try! Even a partial answer helps you learn.';
+    return;
+  }
+  let h = 0; q.keywords.forEach(k => { if (v.includes(k.toLowerCase())) h++; });
+  const r = h / q.keywords.length;
+  fb.hidden = false;
+  if (r >= 0.4) { fb.className = 'sa-feedback good'; fb.innerHTML = '<strong>Nice work!</strong> ' + q.explain; }
+  else if (r >= 0.2) { fb.className = 'sa-feedback partial'; fb.innerHTML = '<strong>Good start!</strong> ' + q.explain; }
+  else { fb.className = 'sa-feedback needs-work'; fb.innerHTML = '<strong>Keep going!</strong> ' + q.explain; }
+}
+
+// Init
+renderQuiz(); renderCard(); renderSA();
+setTimeout(() => { updateTriangle(); initUC(); updateGraph(); }, 100);
+</script>
+</body>
+</html>
